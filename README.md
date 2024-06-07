@@ -3,6 +3,7 @@
 * Download zip file and Extract.
 * Open your editor and add project[Business-pass-repo] extracted file.
 * Then run the following package manager bash in your Terminal.
+* Then Run the Server.
 
 ## Installation
 
