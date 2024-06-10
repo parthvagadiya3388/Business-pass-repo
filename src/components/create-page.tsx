@@ -1,12 +1,25 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "./header";
 import { AiTwotoneDashboard } from "react-icons/ai";
 import { PiUsersThreeBold } from "react-icons/pi";
 import { TbUsers } from "react-icons/tb";
 import { Card, Col, Container, InputGroup, Row, Form, Button } from "react-bootstrap";
-import {  BsBagCheck } from "react-icons/bs";
+import { BsBagCheck } from "react-icons/bs";
 
 export default function Createpage() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [country, setCountry] = useState('');
+  const [phone_number, setPhone_number] = useState('');
+  const [key, setKey] = useState('');
+  const [user_type, setUser_type] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log({ name,  email, country, phone_number, key, user_type });
+  };
+
   return (
     <>
       <Header/>
@@ -50,128 +63,134 @@ export default function Createpage() {
           </Col>
 
           <Col className="bg-light align-content-center" md={9}>
-
-                 <div className="d-flex justify-content-between pt-2 pb-2">
-                     <h3>Users</h3>    
-                    <Button className="Submit_button p-2 border_radius" variant="primary" type="submit">
-                        <Link to='/userpage' className="w-100 text-white text-decoration-none">Back</Link>
-                    </Button>
-                </div>
+            <div className="d-flex justify-content-between pt-2 pb-2">
+              <h3>Users</h3>
+              <Button className="Submit_button p-2 border_radius" variant="primary">
+                <Link to='/userpage' className="w-100 text-white text-decoration-none">Back</Link>
+              </Button>
+            </div>
 
             <Card className="bg-light p-4 border_radius">
               <Row>
-              <p><BsBagCheck className="mb-2" /> <strong>Add user</strong></p>   
-                <Form>
-                    <div className="d-flex flex-wrap">
-
-                   
-                <Col md={12}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>
-                      <strong>Name</strong>
-                    </Form.Label>
-                    <InputGroup>
-                      <Form.Control
-                        className="radius border_radius"
-                        type="text"
-                        placeholder="Enter your name"
-                        id="name"
-                      />
-                    </InputGroup>
-                  </Form.Group>
-                </Col>
-
-                <Col md={12}>
-                   <Form.Group className="mb-3">
-                    <Form.Label>
-                      <strong>Email</strong>
-                    </Form.Label>
-                    <InputGroup>
-                      <Form.Control
-                        className="radius border_radius"
-                        type="email"
-                        placeholder="Enter your email"
-                        id="email"
-                      />
-                    </InputGroup>
-                  </Form.Group>
-                </Col>
-
-                <Col md={6}>
-                    <Form.Group className="mb-3">
+                <p><BsBagCheck className="mb-2" /> <strong>Add user</strong></p>   
+                <Form onSubmit={handleSubmit}>
+                  <div className="d-flex flex-wrap">
+                    <Col md={12}>
+                      <Form.Group className="mb-3">
                         <Form.Label>
-                        <strong>Country</strong>
+                          <strong>Name</strong>
                         </Form.Label>
                         <InputGroup>
-                        <Form.Control
+                          <Form.Control
+                            className="radius border_radius"
+                            type="text"
+                            placeholder="Enter your name"
+                            id="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                          />
+                        </InputGroup>
+                      </Form.Group>
+                    </Col>
+
+                    <Col md={12}>
+                      <Form.Group className="mb-3">
+                        <Form.Label>
+                          <strong>Email</strong>
+                        </Form.Label>
+                        <InputGroup>
+                          <Form.Control
+                            className="radius border_radius"
+                            type="email"
+                            placeholder="Enter your email"
+                            id="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                          />
+                        </InputGroup>
+                      </Form.Group>
+                    </Col>
+
+                    <Col md={6}>
+                      <Form.Group className="mb-3">
+                        <Form.Label>
+                          <strong>Country</strong>
+                        </Form.Label>
+                        <InputGroup>
+                          <Form.Control
                             className="radius border_radius"
                             type="text"
                             placeholder="Enter your Country"
-                            id="Country"
-                        />
+                            id="country"
+                            value={country}
+                            onChange={(e) => setCountry(e.target.value)}
+                          />
                         </InputGroup>
-                    </Form.Group>
-                </Col>
+                      </Form.Group>
+                    </Col>
 
-                <Col md={6}>
-                    <Form.Group className="mb-3">
-                            <Form.Label>
-                            <strong>Phone</strong>
-                            </Form.Label>
-                            <InputGroup>
-                            <Form.Control
-                                className="radius border_radius"
-                                type="text"
-                                placeholder="999XXXXXXX"
-                                id="Phone"
-                            />
-                            </InputGroup>
-                    </Form.Group>
-                </Col>
+                    <Col md={6}>
+                      <Form.Group className="mb-3">
+                        <Form.Label>
+                          <strong>Phone</strong>
+                        </Form.Label>
+                        <InputGroup>
+                          <Form.Control
+                            className="radius border_radius"
+                            type="text"
+                            placeholder="999XXXXXXX"
+                            id="phone"
+                            value={phone_number}
+                            onChange={(e) => setPhone_number(e.target.value)}
+                          />
+                        </InputGroup>
+                      </Form.Group>
+                    </Col>
 
-                <Col md={6}>
-                    <Form.Group className="mb-3">
-                                <Form.Label>
-                                <strong>Key</strong>
-                                </Form.Label>
-                                <InputGroup>
-                                <Form.Control
-                                    className="radius border_radius"
-                                    type="text"
-                                    placeholder="0"
-                                    id="Key"
-                                />
-                                </InputGroup>
-                    </Form.Group>
-                </Col>
+                    <Col md={6}>
+                      <Form.Group className="mb-3">
+                        <Form.Label>
+                          <strong>Key</strong>
+                        </Form.Label>
+                        <InputGroup>
+                          <Form.Control
+                            className="radius border_radius"
+                            type="text"
+                            placeholder="0"
+                            id="key"
+                            value={key}
+                            onChange={(e) => setKey(e.target.value)}
+                          />
+                        </InputGroup>
+                      </Form.Group>
+                    </Col>
 
-                <Col md={6}>
-                    <Form.Group className="mb-3">
-                                <Form.Label>
-                                <strong>User Type</strong>
-                                </Form.Label>
-                                <InputGroup>
-                                <Form.Control
-                                    className="radius border_radius"
-                                    type="text"
-                                    placeholder="0"
-                                    id="user"
-                                />
-                                </InputGroup>
-                    </Form.Group>
-                </Col>
+                    <Col md={6}>
+                      <Form.Group className="mb-3">
+                        <Form.Label>
+                          <strong>User Type</strong>
+                        </Form.Label>
+                        <InputGroup>
+                          <Form.Control
+                            className="radius border_radius"
+                            type="text"
+                            placeholder="0"
+                            id="userType"
+                            value={user_type}
+                            onChange={(e) => setUser_type(e.target.value)}
+                          />
+                        </InputGroup>
+                      </Form.Group>
+                    </Col>
 
                     <div className="container text-end">
-                    <Button className="Submit_button p-2 border_radius" variant="primary" type="submit">
+                      <Button className="Submit_button p-2 border_radius" variant="primary" type="submit">
                         Create
-                    </Button>
+                      </Button>
                     </div>
-                    
-                </div>
-
+                  </div>
                 </Form>
-
-              </Row> 
+              </Row>
             </Card>
           </Col>
         </Row> 
