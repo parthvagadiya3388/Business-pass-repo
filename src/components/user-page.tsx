@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Header from './header';
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { FaEye } from 'react-icons/fa';
@@ -9,37 +9,53 @@ import { AiTwotoneDashboard } from 'react-icons/ai';
 import { PiUsersThreeBold } from 'react-icons/pi';
 import { TbUsers } from 'react-icons/tb';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 interface Users {
+  id: number;
   name: string;
   email: string;
   country: string;
-  phone: number;
-  key: number;
-  usertype: string;
+  phone_number: number;
+  user_type: string;
   status: string;
 }
 
 export default function User() {
   const [userdatas, setUserdatas] = useState<Users[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const location = useLocation();
+  const token = new URLSearchParams(location.search).get('token');
 
+  // console.log("user --------token",token);
+  
   useEffect(() => {
     async function fetchData() {
-      try {
-        const response = await axios.get("http://192.168.1.17:3000/api/users/");
-        console.log("===================" , response);
-        setUserdatas(response.data);
+      try { 
+        const response = await axios.get(`${API_URL}/users/`, {
+          headers: {
+            'Authorization': `Bearer ${token}`  
+          }
+        });
+
+        console.log("====================================", response);
+        
+        if (response.data && Array.isArray(response.data.data)) {
+          setUserdatas(response.data.data);
+        } else {
+          setError('Invalid data format');
+        }
       } catch (error) {
         setError('Error fetching data');
-      } finally {
-        setLoading(false);
-      }
+      } 
     }
 
-    fetchData();
-  }, []);
+    if (token) {
+      fetchData();
+    }
+
+
+  }, [token]);
 
   return (
     <div>
@@ -104,58 +120,52 @@ export default function User() {
             </div>
             <br />
             <div className="table-responsive">
-              {loading ? (
-                <div>Loading...</div>
-              ) : error ? (
-                <div>{error}</div>
-              ) : (
-                <table className="table table-hover w-100 table_Div table-striped">
-                  <thead className="thead-light">
-                    <tr className='Table_header'>
-                      <th className='align-content-center'>Name</th>
-                      <th className='align-content-center'>Email</th>
-                      <th className='align-content-center'>Country</th>
-                      <th className='align-content-center'>Phone</th>
-                      <th className='align-content-center'>Key</th>
-                      <th className='align-content-center'>User Type</th>
-                      <th className='align-content-center'>Status</th>
-                      <th className='align-content-center'>Action</th>
+              <table className="table table-hover w-100 table_Div table-striped">
+                <thead className="thead-light">
+                  <tr className='Table_header'>
+                    <th className='align-content-center'>Name</th>
+                    <th className='align-content-center'>Email</th>
+                    <th className='align-content-center'>Country</th>
+                    <th className='align-content-center'>Phone</th>
+                    <th className='align-content-center'>Key</th>
+                    <th className='align-content-center'>User Type</th>
+                    {/* <th className='align-content-center'>Status</th> */}
+                    <th className='align-content-center'>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {userdatas.map((user ,index) => (
+                    <tr key={index}>
+                      <td className='align-content-center'>{user.name}</td>
+                      <td className='align-content-center'>{user.email}</td>
+                      <td className='align-content-center'>{user.country}</td>
+                      <td className='align-content-center'>{user.phone_number}</td>
+                      <td className='align-content-center'>{user.id}</td>
+                      <td className='align-content-center'>{user.user_type}</td>
+                      {/* <td className='align-content-center'>
+                        <button className={`badge p-2 ${user.status === 'Deleted' ? 'btn-outline-danger status_delete' : 'btn-outline-success status_active'}`}>
+                          {user.status}
+                        </button>
+                      </td> */}
+                      <td className='align-content-center'>
+                        <button className='border-0 bg-transparent text-dark'>
+                          <FaEye />
+                        </button>
+                        <button className='border-0 bg-transparent text-dark'>
+                          <TiEdit />
+                        </button>
+                        <button className='border-0 bg-transparent text-dark'>
+                          <MdDeleteForever />
+                        </button>
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {userdatas.map((user, index) => (
-                      <tr key={index}>
-                        <td className='align-content-center'>{user.name}</td>
-                        <td className='align-content-center'>{user.email}</td>
-                        <td className='align-content-center'>{user.country}</td>
-                        <td className='align-content-center'>{user.phone}</td>
-                        <td className='align-content-center'>{user.key}</td>
-                        <td className='align-content-center'>{user.usertype}</td>
-                        <td className='align-content-center'>
-                          <button className={`badge p-2 ${user.status === 'Deleted' ? 'btn-outline-danger status_delete' : 'btn-outline-success status_active'}`}>
-                            {user.status}
-                          </button>
-                        </td>
-                        <td className='align-content-center'>
-                          <button className='border-0 bg-transparent text-dark'>
-                            <FaEye />
-                          </button>
-                          <button className='border-0 bg-transparent text-dark'>
-                            <TiEdit />
-                          </button>
-                          <button className='border-0 bg-transparent text-dark'>
-                            <MdDeleteForever />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
+                  ))}
+                </tbody>
+              </table>
             </div>
           </Col>
         </Row>
       </Container>
     </div>
-  )
+  );
 }
