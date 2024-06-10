@@ -7,7 +7,7 @@ const Mainheader: React.FC = () => {
       <nav className="navbar navbar-expand-lg bg-light">
         <div className="container-fluid col-12 p-2">
           <div className="col-8">
-            <Link className="navbar-brand" to="/login">
+            <Link className="navbar-brand" to="#">
               <strong>
                 <i className="fa-solid fa-film text-primary"></i> BusinessPass
               </strong>
