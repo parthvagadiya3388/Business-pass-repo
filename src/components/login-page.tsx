@@ -5,30 +5,39 @@ import Mainheader from "./main-header";
 import img1 from '../assets/images/cofee.jpg';
 import { Button, Card, Col, Container, Form, Image, Row, InputGroup, Alert } from "react-bootstrap";
 import { useState } from 'react';
+import { API_URL } from '../config';
+// import { useStore } from 'zustand';
 
 export default function Loginpage() {
   const [username_or_email, setUsername_or_email] = useState('');
   const [password, setPassword] = useState('');
+  // const {username_or_email , password , setUsername_or_email ,setPassword } = useStore();
+  
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
+  
   const handleSubmit = async (e:any) => {
     e.preventDefault();
+    
     try {
-      const response = await axios.post('http://192.168.1.17:3000/api/login/', { username_or_email, password });
-        
-      console.log("============================================",response)    
-        
+      const response = await axios.post(`${API_URL}/login/`, { username_or_email, password });
+
+      console.log("login page-----------------------" ,response)
+      
+      
       if (response.status === 200) {
-        navigate('/userpage'); 
+
+        const token = response.data.tokens.access;
+        // console.log("==========================================login==",token);    
+        navigate(`/userpage?token=${token}`); 
         console.log(response.data.message);
       } 
     } 
-    catch (error) {
+    catch (error :any) {
       setError('Invalid username/email or password');
-    }   
-  };
-
+      }   
+      };
+      
   return (
     <div>
       <Mainheader/>
