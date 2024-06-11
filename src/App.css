@@ -57,3 +57,67 @@
   border-radius: 15px !important;
   color: #c93b3b !important;
 }
+
+/* ----------------------------------------------------------welcome -page------------------------------------- */
+
+
+.About_image_col{
+  width: 100%;
+  height: 600px;
+}
+.About_Image_div{
+  background-color: #E7EEFB;
+}
+
+.About_image{
+  width: 90%;
+  height: 130%;
+  align-content: center;
+  margin-left: 35px;
+  margin-top: -60px;
+}
+.list_item{
+  margin-top: 66px;
+  align-items: center;
+}
+.List_ul{
+  list-style: none;
+}
+
+@media (min-width: 1100px) { 
+  .About_image_col{
+    height: 600px !important;
+  }
+}
+@media (max-width: 568px) { 
+  .About_image_col{
+    height: 830px !important;
+  }
+  .About_image{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+ 
+}
+
+@media (min-width: 768px) { 
+  .Footer_Conteiner{
+    margin-top: 20px !important;
+  }
+  .Wel_img{
+    width: 100%;
+    object-fit: cover;
+  }
+  .main_card{
+    margin-top: 10px;
+  }
+  .Footer_Conteiner{
+    margin-top: 20px !important;
+  }
+  .About_image_col{
+    width: 100%;
+    height: 820px !important;
+  }
+}
+
