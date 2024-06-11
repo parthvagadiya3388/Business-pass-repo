@@ -11,7 +11,7 @@ const Header: React.FC = () => {
         <Row className="align-items-center d-flex flex-wrap pt-2">
           <Col xs={6}>
             <h4 className="d-inline-block">
-              <NavLink className="navbar-brand" to="/login">
+              <NavLink className="navbar-brand" to="/">
                 <strong>
                   <i className="fa-solid fa-film text-primary"></i> BusinessPass
                 </strong>
