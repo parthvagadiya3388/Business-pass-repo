@@ -28,9 +28,11 @@ const useLoginStore = create<UserState>((set) => ({
 
       if (response.status === 200) {
         const token = response.data.tokens.access;
-        navigate(`/userpage?token=${token}`);
+        localStorage.setItem('token', token);
+        navigate(`/userpage`);
       }
-    } catch (error: any) {
+      
+    } catch (error: any) {  
       set({ error: 'Invalid username/email or password' });
     }
   }
