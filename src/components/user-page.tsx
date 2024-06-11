@@ -12,8 +12,9 @@ import useUserStore from '../zustandstore/userApisStore';
 
 export default function User() {
   const { users, error, userApis } = useUserStore();
-  const location = useLocation();
-  const token = new URLSearchParams(location.search).get('token');
+  // const location = useLocation();
+  // const token = new URLSearchParams(location.search).get('token');
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     if (token) {
