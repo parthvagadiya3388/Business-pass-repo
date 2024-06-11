@@ -4,7 +4,7 @@ import Header from "./header";
 import { AiTwotoneDashboard } from "react-icons/ai";
 import { PiUsersThreeBold } from "react-icons/pi";
 import { TbUsers } from "react-icons/tb";
-import { Card, Col, Container, InputGroup, Row, Form, Button} from "react-bootstrap";
+import { Card, Col, Container, InputGroup, Row, Form, Button } from "react-bootstrap";
 import { BsBagCheck } from "react-icons/bs";
 
 export default function Createpage() {
@@ -15,22 +15,49 @@ export default function Createpage() {
   const [key, setKey] = useState('');
   const [user_type, setUser_type] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ name,  email, country, phone_number, key, user_type });
+    const userData = { name, email, country, phone_number, key, user_type };
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://192.168.1.17:3000/api/users/', {
+
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(userData),
+          });
+
+        console.log("create responce--------------",response);
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log(data);
+      
+    } catch (error) {
+      console.error('Error:', error);
+
+    }
   };
 
   return (
     <>
-      <Header/>
+      <Header />
       <Container fluid>
         <Row>
-          <Col md={3} className=''>
+          <Col md={3} className="">
             <div className="Profile_Side_bar border_radias">
               <ul className="nav flex-column">
                 <li className="nav-item">
-                  <Link className="nav-link  btn btn-primary radius text-start text-dark border_radius" to="#">
-                    <AiTwotoneDashboard  className='' /> Dashboard
+                  <Link className="nav-link btn btn-primary radius text-start text-dark border_radius" to="#">
+                    <AiTwotoneDashboard className="" /> Dashboard
                   </Link>
                 </li>
                 <li className="nav-item">
@@ -166,17 +193,17 @@ export default function Createpage() {
                     </Col>
 
                     <Col md={6}>
-                        <Form.Label>
-                          <strong>User Type</strong>
-                        </Form.Label>
-                          <select
-                            className="form-select border_radius"
-                            value={user_type}
-                            onChange={(e) => setUser_type(e.target.value)}
-                          >
-                            <option value="Business">Business</option>
-                            <option value="Personal">Personal</option>
-                          </select>
+                      <Form.Label>
+                        <strong>User Type</strong>
+                      </Form.Label>
+                      <select
+                        className="form-select border_radius"
+                        value={user_type}
+                        onChange={(e) => setUser_type(e.target.value)}
+                      >
+                        <option value="Business">Business</option>
+                        <option value="Personal">Personal</option>
+                      </select>
                     </Col>
 
                     <div className="container text-end">
