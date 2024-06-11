@@ -4,7 +4,7 @@ import Header from "./header";
 import { AiTwotoneDashboard } from "react-icons/ai";
 import { PiUsersThreeBold } from "react-icons/pi";
 import { TbUsers } from "react-icons/tb";
-import { Card, Col, Container, InputGroup, Row, Form, Button } from "react-bootstrap";
+import { Card, Col, Container, InputGroup, Row, Form, Button} from "react-bootstrap";
 import { BsBagCheck } from "react-icons/bs";
 
 export default function Createpage() {
@@ -166,21 +166,17 @@ export default function Createpage() {
                     </Col>
 
                     <Col md={6}>
-                      <Form.Group className="mb-3">
                         <Form.Label>
                           <strong>User Type</strong>
                         </Form.Label>
-                        <InputGroup>
-                          <Form.Control
-                            className="radius border_radius"
-                            type="text"
-                            placeholder="0"
-                            id="userType"
+                          <select
+                            className="form-select border_radius"
                             value={user_type}
                             onChange={(e) => setUser_type(e.target.value)}
-                          />
-                        </InputGroup>
-                      </Form.Group>
+                          >
+                            <option value="Business">Business</option>
+                            <option value="Personal">Personal</option>
+                          </select>
                     </Col>
 
                     <div className="container text-end">
@@ -188,6 +184,7 @@ export default function Createpage() {
                         Create
                       </Button>
                     </div>
+
                   </div>
                 </Form>
               </Row>
