@@ -1,61 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Header from './header';
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Alert, Button, Col, Container, Row } from "react-bootstrap";
 import { FaEye } from 'react-icons/fa';
 import { TiEdit } from 'react-icons/ti';
 import { MdDeleteForever } from 'react-icons/md';
 import { AiTwotoneDashboard } from 'react-icons/ai';
 import { PiUsersThreeBold } from 'react-icons/pi';
 import { TbUsers } from 'react-icons/tb';
-import axios from 'axios';
-import { API_URL } from '../config';
-
-interface Users {
-  id: number;
-  name: string;
-  email: string;
-  country: string;
-  phone_number: number;
-  user_type: string;
-  status: string;
-}
+import useUserStore from '../zustandstore/userApisStore';
 
 export default function User() {
-  const [userdatas, setUserdatas] = useState<Users[]>([]);
-  const [error, setError] = useState('');
+  const { users, error, userApis } = useUserStore();
   const location = useLocation();
   const token = new URLSearchParams(location.search).get('token');
 
-  // console.log("user --------token",token);
-  
   useEffect(() => {
-    async function fetchData() {
-      try { 
-        const response = await axios.get(`${API_URL}/users/`, {
-          headers: {
-            'Authorization': `Bearer ${token}`  
-          }
-        });
-
-        console.log("====================================", response);
-        
-        if (response.data && Array.isArray(response.data.data)) {
-          setUserdatas(response.data.data);
-        } else {
-          setError('Invalid data format');
-        }
-      } catch (error) {
-        setError('Error fetching data');
-      } 
-    }
-
     if (token) {
-      fetchData();
+      userApis(token); 
     }
-
-
-  }, [token]);
+  }, [token, userApis]);
 
   return (
     <div>
@@ -129,12 +93,11 @@ export default function User() {
                     <th className='align-content-center'>Phone</th>
                     <th className='align-content-center'>Key</th>
                     <th className='align-content-center'>User Type</th>
-                    {/* <th className='align-content-center'>Status</th> */}
                     <th className='align-content-center'>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {userdatas.map((user ,index) => (
+                  {users.map((user, index) => (
                     <tr key={index}>
                       <td className='align-content-center'>{user.name}</td>
                       <td className='align-content-center'>{user.email}</td>
@@ -142,7 +105,7 @@ export default function User() {
                       <td className='align-content-center'>{user.phone_number}</td>
                       <td className='align-content-center'>{user.id}</td>
                       <td className='align-content-center'>{user.user_type}</td>
-                      {/* <td className='align-content-center'>
+                       {/* <td className='align-content-center'>
                         <button className={`badge p-2 ${user.status === 'Deleted' ? 'btn-outline-danger status_delete' : 'btn-outline-success status_active'}`}>
                           {user.status}
                         </button>
@@ -162,6 +125,7 @@ export default function User() {
                   ))}
                 </tbody>
               </table>
+              {error && <Alert variant="danger">{error}</Alert>}
             </div>
           </Col>
         </Row>
