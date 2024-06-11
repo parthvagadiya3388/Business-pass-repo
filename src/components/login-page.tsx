@@ -1,46 +1,30 @@
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FiLock, FiMail } from "react-icons/fi";
 import Mainheader from "./main-header";
 import img1 from '../assets/images/cofee.jpg';
 import { Button, Card, Col, Container, Form, Image, Row, InputGroup, Alert } from "react-bootstrap";
-import { useState } from 'react';
-import { API_URL } from '../config';
-// import { useStore } from 'zustand';
+import useLoginStore from '../zustandstore/loginApiStore';
 
 export default function Loginpage() {
-  const [username_or_email, setUsername_or_email] = useState('');
-  const [password, setPassword] = useState('');
-  // const {username_or_email , password , setUsername_or_email ,setPassword } = useStore();
-  
-  const [error, setError] = useState('');
   const navigate = useNavigate();
-  
-  const handleSubmit = async (e:any) => {
+  const {
+    username_or_email,
+    password,
+    error,
+    setUsernameOrEmail,
+    setPassword,
+    login
+  } = useLoginStore();
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    
-    try {
-      const response = await axios.post(`${API_URL}/login/`, { username_or_email, password });
+    await login(navigate);
+  };
 
-      console.log("login page-----------------------" ,response)
-      
-      
-      if (response.status === 200) {
 
-        const token = response.data.tokens.access;
-        // console.log("==========================================login==",token);    
-        navigate(`/userpage?token=${token}`); 
-        console.log(response.data.message);
-      } 
-    } 
-    catch (error :any) {
-      setError('Invalid username/email or password');
-      }   
-      };
-      
   return (
     <div>
-      <Mainheader/>
+      <Mainheader />
       <Container fluid>
         <Row className="">
           <Col className="p-4 wlc_card" sm={12} md={12} lg={5}>
@@ -65,14 +49,14 @@ export default function Loginpage() {
                 <Form.Group className="mb-3" controlId="email">
                   <Form.Label><strong>Email</strong></Form.Label>
                   <InputGroup>
-                    <InputGroup.Text><FiMail /></InputGroup.Text> 
+                    <InputGroup.Text><FiMail /></InputGroup.Text>
                     <Form.Control
                       className="radius"
                       type="text"
                       placeholder="Enter your email"
                       value={username_or_email}
-                       autoComplete="username"
-                      onChange={(e) => setUsername_or_email(e.target.value)}
+                      autoComplete="username"
+                      onChange={(e) => setUsernameOrEmail(e.target.value)}
                     />
                   </InputGroup>
                 </Form.Group>
@@ -80,7 +64,7 @@ export default function Loginpage() {
                 <Form.Group className="mb-3" controlId="password">
                   <Form.Label><strong>Password</strong></Form.Label>
                   <InputGroup>
-                    <InputGroup.Text><FiLock /></InputGroup.Text> 
+                    <InputGroup.Text><FiLock /></InputGroup.Text>
                     <Form.Control
                       type="password"
                       placeholder="Password"
@@ -97,9 +81,9 @@ export default function Loginpage() {
               </Form>
             </Card>
           </Col>
-          
+
           <Col sm={12} md={12} lg={7} className="object-fit-cover">
-            <Image className="Wel_img w-100 h-100" src={img1}/>
+            <Image className="Wel_img w-100 h-100" src={img1} />
           </Col>
         </Row>
       </Container>
