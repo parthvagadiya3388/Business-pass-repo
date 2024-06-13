@@ -20,7 +20,7 @@ const Header: React.FC = () => {
           </Col>
           <Col xs={6} className="text-end d-flex justify-content-end align-items-center p-0">
             <img src={img4} alt="Profile" className="rounded-circle" width="40" />
-            <span className="ms-1 me-0">Tony Patel</span>
+            <span className="ms-1 me-0">Admin_1</span>
             <Button className="bg-white text-dark border-0">
               <FaCaretDown />
             </Button>
