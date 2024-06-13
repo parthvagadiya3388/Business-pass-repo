@@ -11,10 +11,12 @@ interface User {
   user_type: string;
   status: string;
 }
+
 interface UserState {
   users: User[];
   error: string;
   userApis: (token: string) => Promise<void>;
+  deleteUserApis: (token: string, userId: number) => Promise<void>;
 }
 
 const useUserStore = create<UserState>((set) => ({
@@ -29,7 +31,7 @@ const useUserStore = create<UserState>((set) => ({
         }
       });
 
-      console.log("--------userllist----------",response.data.message);
+      console.log("--------userllist----------", response.data.message);
 
       if (response.data && Array.isArray(response.data.data)) {
         set({ users: response.data.data, error: '' });
@@ -40,6 +42,19 @@ const useUserStore = create<UserState>((set) => ({
       set({ error: 'Error fetching data' });
     }
   },
+
+  deleteUserApis: async (token, userId) => {
+    try {
+      await axios.delete(`${API_URL}/users/${userId}/`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      set((state) => ({
+        users: state.users.filter(user => user.id !== userId)
+      }));
+    } catch (error) {
+      set({ error: 'Error Deleteing ' });
+    }
+  }
 }));
 
 export default useUserStore;
