@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { FiLock, FiMail } from "react-icons/fi";
+import { FiLock, FiUser } from "react-icons/fi";
 import Mainheader from "./main-header";
 import img1 from '../assets/images/cofee.jpg';
 import { Button, Card, Col, Container, Form, Image, Row, InputGroup, Alert } from "react-bootstrap";
@@ -11,22 +11,25 @@ export default function Loginpage() {
     username_or_email,
     password,
     error,
+    usernameError,
+    passwordError,
     setUsernameOrEmail,
     setPassword,
     login
   } = useLoginStore();
+
+  // console.log(" //////////////////////////",username_or_email , password , error , usernameError , passwordError );
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     await login(navigate);
   };
 
-
   return (
     <div>
       <Mainheader />
       <Container fluid>
-        <Row className="">
+        <Row>
           <Col className="p-4 wlc_card" sm={12} md={12} lg={5}>
             <Card className="p-4 main_card">
               <h2><strong>Welcome Back</strong></h2>
@@ -47,18 +50,19 @@ export default function Loginpage() {
               <Form onSubmit={handleSubmit}>
                 {error && <Alert variant="danger">{error}</Alert>}
                 <Form.Group className="mb-3" controlId="email">
-                  <Form.Label><strong>Email</strong></Form.Label>
+                  <Form.Label><strong>Username</strong></Form.Label>
                   <InputGroup>
-                    <InputGroup.Text><FiMail /></InputGroup.Text>
+                    <InputGroup.Text><FiUser /></InputGroup.Text>
                     <Form.Control
                       className="radius"
                       type="text"
-                      placeholder="Enter your email"
+                      placeholder="Enter Your Username"
                       value={username_or_email}
                       autoComplete="username"
                       onChange={(e) => setUsernameOrEmail(e.target.value)}
                     />
                   </InputGroup>
+                  {usernameError && <div className='text-danger'>{usernameError}</div>}
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="password">
@@ -73,6 +77,7 @@ export default function Loginpage() {
                       onChange={(e) => setPassword(e.target.value)}
                     />
                   </InputGroup>
+                  {passwordError && <div className='text-danger'>{passwordError}</div>}
                 </Form.Group>
 
                 <Button className="Submit_button w-100" variant="primary" type="submit">
