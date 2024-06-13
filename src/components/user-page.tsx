@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Header from './header';
 import { Alert, Button, Col, Container, Row } from "react-bootstrap";
 import { FaEye } from 'react-icons/fa';
@@ -11,9 +11,8 @@ import { TbUsers } from 'react-icons/tb';
 import useUserStore from '../zustandstore/userApisStore';
 
 export default function User() {
-  const { users, error, userApis } = useUserStore();
-  // const location = useLocation();
-  // const token = new URLSearchParams(location.search).get('token');
+  const { users, error, userApis , deleteUserApis } = useUserStore();
+  const [searchInput, setSearchInput] = useState("");
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -21,6 +20,16 @@ export default function User() {
       userApis(token); 
     }
   }, [token, userApis]);
+
+  const handleSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
+  };
+
+  const handleDelete = async (userId: number) => {
+    if (token) {
+      await deleteUserApis(token, userId);
+    }
+  };
 
   return (
     <div>
@@ -76,6 +85,8 @@ export default function User() {
                     type="text"
                     className="form-control"
                     placeholder="Search User..."
+                    value={searchInput}
+                    onChange={handleSearchInputChange}
                   />
                 </div>
                 <Button className='border_radias form-control Input_button_emp border_radius'>
@@ -98,33 +109,34 @@ export default function User() {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((user, index) => (
-                    <tr key={index}>
-                      <td className='align-content-center'>{user.name}</td>
-                      <td className='align-content-center'>{user.email}</td>
-                      <td className='align-content-center'>{user.country}</td>
-                      <td className='align-content-center'>{user.phone_number}</td>
-                      <td className='align-content-center'>{user.id}</td>
-                      <td className='align-content-center'>{user.user_type}</td>
-                       {/* <td className='align-content-center'>
-                        <button className={`badge p-2 ${user.status === 'Deleted' ? 'btn-outline-danger status_delete' : 'btn-outline-success status_active'}`}>
-                          {user.status}
-                        </button>
-                      </td> */}
-                      <td className='align-content-center'>
-                        <button className='border-0 bg-transparent text-dark'>
-                          <FaEye />
-                        </button>
-                        <button className='border-0 bg-transparent text-dark'>
-                          <TiEdit />
-                        </button>
-                        <button className='border-0 bg-transparent text-dark'>
-                          <MdDeleteForever />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+                    {users.filter((user , index) => {
+                      const searchString = searchInput.toLowerCase();
+                      return (
+                        user.name.toLowerCase().includes(searchString) ||
+                        user.email.toLowerCase().includes(searchString) 
+                      );
+                    }).map((user, index) => (
+                      <tr key={index}>
+                          <td className='align-content-center'>{user.name}</td>
+                          <td className='align-content-center'>{user.email}</td>
+                          <td className='align-content-center'>{user.country}</td>
+                          <td className='align-content-center'>{user.phone_number}</td>
+                          <td className='align-content-center'>{user.id}</td>
+                          <td className='align-content-center'>{user.user_type}</td>
+                          <td className='align-content-center'>
+                              <button className='border-0 bg-transparent text-dark'>
+                                <FaEye />
+                              </button>
+                              <button className='border-0 bg-transparent text-dark'>
+                                <TiEdit />
+                              </button>
+                              <button className='border-0 bg-transparent text-dark'  onClick={() => handleDelete(user.id)}>
+                                <MdDeleteForever />
+                              </button>
+                          </td>
+                      </tr>
+                    ))}
+                  </tbody>
               </table>
               {error && <Alert variant="danger">{error}</Alert>}
             </div>
