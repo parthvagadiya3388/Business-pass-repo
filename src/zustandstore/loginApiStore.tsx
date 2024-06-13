@@ -6,25 +6,26 @@ interface UserState {
   username_or_email: string;
   password: string;
   error: string;
+  usernameError: string;
+  passwordError: string;
   setUsernameOrEmail: (username_or_email: string) => void;
   setPassword: (password: string) => void;
   login: (navigate: Function) => Promise<void>;
 }
 
 const useLoginStore = create<UserState>((set) => ({
-
-  username_or_email: 'admin',
+  username_or_email: '',
   password: '',
   error: '',
-  setUsernameOrEmail: (username_or_email) => set({ username_or_email }),
-  setPassword: (password) => set({ password }),
+  usernameError: '',
+  passwordError: '',
+  setUsernameOrEmail: (username_or_email) => set({ username_or_email, usernameError: '', error: '' }),
+  setPassword: (password) => set({ password, passwordError: '', error: '' }),
 
   login: async (navigate) => {
     try {
       const { username_or_email, password } = useLoginStore.getState();
       const response = await axios.post(`${API_URL}/login/`, { username_or_email, password });
-
-      console.log("store login----------",response);
 
       if (response.status === 200) {
         const token = response.data.tokens.access;
@@ -32,8 +33,18 @@ const useLoginStore = create<UserState>((set) => ({
         navigate(`/userpage`);
       }
       
-    } catch (error: any) {  
-      set({ error: 'Invalid username/email or password' });
+    } catch (error: any) {
+      if (error.response && error.response.status === 400 && error.response.data) {
+        const { username_or_email, password } = error.response.data;
+        console.log("+++++++++++++++++++++++++++",error.response.data);
+        set({
+          usernameError: username_or_email ? username_or_email[0] : '',
+          passwordError: password ? password[0] : '',
+          // error: 'Invalid username/email or password'
+        });
+      } else {
+        set({ error: 'Invalid username/email or password' });
+      }
     }
   }
 }));
