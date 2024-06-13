@@ -22,14 +22,14 @@ interface FormValues {
 }
 
 const initialValues: FormValues = {
-  name: "",
-  email: "",
-  country: "",
+  name: "user_5",
+  email: "user5@gmail.com",
+  country: "IN",
   phone_number: "",
-  key: "",
+  key: "12",
   user_type: "",
-  password: "",
-  confirm_password: "",
+  password: "12345678",
+  confirm_password: "12345678",
 };
 
 export default function Createpage() {
@@ -157,6 +157,7 @@ console.log("seterrors-----------------------",error)
                           />
                         </InputGroup>
                         {formik.touched.email && formik.errors.email && <div className="text-danger">{formik.errors.email}</div>}
+                        {error && <div className="text-danger">{error.email}</div>}
                       </Form.Group>
                     </Col>
 
@@ -174,6 +175,7 @@ console.log("seterrors-----------------------",error)
                         <option value="USA">USA</option>
                       </select>
                       {formik.touched.country && formik.errors.country && <div className="text-danger">{formik.errors.country}</div>}
+                      {error && <div className="text-danger">{error.country}</div>}
                     </Col>
 
                     <Col md={6}>
@@ -191,6 +193,7 @@ console.log("seterrors-----------------------",error)
                           />
                         </InputGroup>
                         {formik.touched.phone_number && formik.errors.phone_number && <div className="text-danger">{formik.errors.phone_number}</div>}
+                        {error && <div className="text-danger">{error.phone_number}</div>}
                       </Form.Group>
                     </Col>
 
@@ -226,6 +229,7 @@ console.log("seterrors-----------------------",error)
                         <option value="Personal">Personal</option>
                       </select>
                       {formik.touched.user_type && formik.errors.user_type && <div className="text-danger">{formik.errors.user_type}</div>}
+                      {error && <div className="text-danger">{error.user_type}</div>}
                     </Col>
 
                     <Col md={6}>
