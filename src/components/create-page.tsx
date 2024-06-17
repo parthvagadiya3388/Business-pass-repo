@@ -9,6 +9,7 @@ import { BsBagCheck } from "react-icons/bs";
 import { API_URL } from "../config";
 import { useFormik, FormikHelpers } from "formik";
 import schema from "../validation/validation-schema";
+import useUserEditStore from "../zustandstore/userEditstore";
 
 interface FormValues {
   name: string;
@@ -27,16 +28,15 @@ const initialValues: FormValues = {
   country: "IN",
   phone_number: "",
   key: "12",
-  user_type: "",
+  user_type: "Business",
   password: "12345678",
   confirm_password: "12345678",
 };
 
 export default function Createpage() {
   const [error, setErrors] = useState({} as Record<string, string>);
+  const { isEdit, setIsEdit , userUpdateApis } = useUserEditStore(); 
   const navigate = useNavigate();
-
-console.log("seterrors-----------------------",error)
 
   const formik = useFormik<FormValues>({
     initialValues,
@@ -50,7 +50,7 @@ console.log("seterrors-----------------------",error)
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
-          },
+           },
           body: JSON.stringify(values),
         });
 
@@ -60,7 +60,6 @@ console.log("seterrors-----------------------",error)
           return;
         }
 
-        // const data = await response.json();
         resetForm();
         navigate('/userpage');
       } catch (error) {
@@ -121,7 +120,7 @@ console.log("seterrors-----------------------",error)
 
             <Card className="bg-light p-4 border_radius">
               <Row>
-                <p><BsBagCheck className="mb-2" /> <strong>Add user</strong></p>   
+                <p><BsBagCheck className="mb-2" /> <strong> {isEdit ? 'Create User' : 'Update User' }</strong></p>   
                 <Form onSubmit={formik.handleSubmit}>
                   <div className="d-flex flex-wrap">
                     <Col md={12}>
@@ -270,7 +269,7 @@ console.log("seterrors-----------------------",error)
 
                     <div className="container text-end">
                       <Button className="Submit_button p-2 border_radius" variant="primary" type="submit">
-                        Create
+                      {isEdit ? 'Create' : 'Update' }
                       </Button>
                     </div>
                   </div>
