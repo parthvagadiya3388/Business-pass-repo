@@ -17,11 +17,16 @@ interface UserState {
   error: string;
   userApis: (token: string) => Promise<void>;
   deleteUserApis: (token: string, userId: number) => Promise<void>;
+  userUpdateApis: (token: string, userId: number, userData: Partial<User>) => Promise<void>;
+  setSelectedUser: (user: User | null) => void;
+  clearSelectedUser: () => void;
+  selectedUser: User | null;
 }
 
 const useUserStore = create<UserState>((set) => ({
   users: [],
   error: '',
+  selectedUser: null,
 
   userApis: async (token) => {
     try {
@@ -52,9 +57,25 @@ const useUserStore = create<UserState>((set) => ({
         users: state.users.filter(user => user.id !== userId)
       }));
     } catch (error) {
-      set({ error: 'Error Deleteing ' });
+      set({ error: 'Error deleting user' });
     }
-  }
+  },
+
+  userUpdateApis: async (token, userId, userData) => {
+    try {
+      await axios.patch(`${API_URL}/users/${userId}/`, userData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      set((state) => ({
+        users: state.users.map(user => user.id === userId ? { ...user, ...userData } : user)
+      }));
+    } catch (error) {
+      set({ error: 'Error updating user' });
+    }
+  },
+
+  setSelectedUser: (user) => set({ selectedUser: user }),
+  clearSelectedUser: () => set({ selectedUser: null }),
 }));
 
 export default useUserStore;
