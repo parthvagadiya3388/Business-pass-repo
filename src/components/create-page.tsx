@@ -9,7 +9,6 @@ import { BsBagCheck } from "react-icons/bs";
 import { API_URL } from "../config";
 import { useFormik, FormikHelpers } from "formik";
 import schema from "../validation/validation-schema";
-import useUserEditStore from "../zustandstore/userEditstore";
 
 interface FormValues {
   name: string;
@@ -23,11 +22,11 @@ interface FormValues {
 }
 
 const initialValues: FormValues = {
-  name: "user_5",
-  email: "user5@gmail.com",
+  name: "",
+  email: "",
   country: "IN",
   phone_number: "",
-  key: "12",
+  key: "",
   user_type: "Business",
   password: "12345678",
   confirm_password: "12345678",
@@ -35,7 +34,6 @@ const initialValues: FormValues = {
 
 export default function Createpage() {
   const [error, setErrors] = useState({} as Record<string, string>);
-  const { isEdit, setIsEdit , userUpdateApis } = useUserEditStore(); 
   const navigate = useNavigate();
 
   const formik = useFormik<FormValues>({
@@ -120,7 +118,7 @@ export default function Createpage() {
 
             <Card className="bg-light p-4 border_radius">
               <Row>
-                <p><BsBagCheck className="mb-2" /> <strong> {isEdit ? 'Create User' : 'Update User' }</strong></p>   
+                <p><BsBagCheck className="mb-2" /> <strong>Create User</strong></p>   
                 <Form onSubmit={formik.handleSubmit}>
                   <div className="d-flex flex-wrap">
                     <Col md={12}>
@@ -138,6 +136,7 @@ export default function Createpage() {
                           />
                         </InputGroup>
                         {formik.touched.name && formik.errors.name && <div className="text-danger">{formik.errors.name}</div>}
+                        {error && <div className="text-danger">{error.name}</div>}
                       </Form.Group>
                     </Col>
 
@@ -269,7 +268,7 @@ export default function Createpage() {
 
                     <div className="container text-end">
                       <Button className="Submit_button p-2 border_radius" variant="primary" type="submit">
-                      {isEdit ? 'Create' : 'Update' }
+                          Create
                       </Button>
                     </div>
                   </div>
