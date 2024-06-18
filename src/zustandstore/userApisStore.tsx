@@ -3,7 +3,8 @@ import { API_URL } from '../config';
 import { create } from 'zustand';
 
 interface User {
-  id: number;
+  id:number;
+  key: number;
   name: string;
   email: string;
   country: string;
@@ -63,9 +64,11 @@ const useUserStore = create<UserState>((set) => ({
 
   userUpdateApis: async (token, userId, userData) => {
     try {
-      await axios.patch(`${API_URL}/users/${userId}/`, userData, {
+         const  responseUpdate =  await axios.patch(`${API_URL}/users/${userId}/`, userData, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      console.log("updateApis/*///////////*/**//*",responseUpdate.data);
+
       set((state) => ({
         users: state.users.map(user => user.id === userId ? { ...user, ...userData } : user)
       }));
