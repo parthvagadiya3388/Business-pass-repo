@@ -9,22 +9,19 @@ import { AiTwotoneDashboard } from 'react-icons/ai';
 import { PiUsersThreeBold } from 'react-icons/pi';
 import { TbUsers } from 'react-icons/tb';
 import useUserStore from '../zustandstore/userApisStore';
-import useUserEditStore from '../zustandstore/userEditstore';
 
 export default function User() {
-  const { users, error,selectedUser, userApis, deleteUserApis, setSelectedUser ,userUpdateApis } = useUserStore();
+  const { users, error , userApis, deleteUserApis, setSelectedUser } = useUserStore();
   const [searchInput, setSearchInput] = useState("");
   const [show, setShow] = useState<boolean>(false);
   const [userToDelete, setUserToDelete] = useState<any>(null);
   const [actionType, setActionType] = useState<string>("");
-  const { isEdit, setIsEdit } = useUserEditStore(); 
 
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
-console.log("data---2-------------------",users);
-
+  
+  console.log("data---2-------------------",userToDelete);
   console.log("actionType***************",actionType)
-  console.log("isEdit***************",isEdit);
 
   const handleClose = () => setShow(false);
 
@@ -46,12 +43,7 @@ console.log("data---2-------------------",users);
 
   const handleEdit = (user: any) => {
     setSelectedUser(user);
-    setIsEdit(false);
-    navigate('/createpage');
-  };
-
-  const handleAdd = () => {
-    setIsEdit(true);
+    navigate('/update-page');
   };
 
   const handleDelete = async () => {
@@ -120,7 +112,7 @@ console.log("data---2-------------------",users);
                   />
                 </div>
                 <Button className='border_radias form-control Input_button_emp border_radius'>
-                  <Link to='/createpage' className='text-white text-decoration-none link_tag' onClick={handleAdd}>Add User</Link>
+                  <Link to='/createpage' className='text-white text-decoration-none link_tag'>Add User</Link>
                 </Button>
               </Col>
             </div>
@@ -151,14 +143,14 @@ console.log("data---2-------------------",users);
                       <td className='align-content-center'>{user.email}</td>
                       <td className='align-content-center'>{user.country}</td>
                       <td className='align-content-center'>{user.phone_number}</td>
-                      <td className='align-content-center'>{user.id}</td>
+                      <td className='align-content-center'>{user.key}</td>
                       <td className='align-content-center'>{user.user_type}</td>
                       <td className='align-content-center'>
                         <button className='border-0 bg-transparent text-dark' onClick={() => handleShow(user, 'invite')}>
                           <FaEye />
                         </button>
                         <button className='border-0 bg-transparent text-dark' onClick={() => handleEdit(user)}>
-                          <TiEdit /> edit
+                          <TiEdit /> 
                         </button>
                         <button className='border-0 bg-transparent text-dark' onClick={() => handleShow(user, 'delete')}>
                           <MdDeleteForever />
