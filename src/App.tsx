@@ -6,6 +6,7 @@ import Userpage from "./components/user-page";
 import Createpage from "./components/create-page";
 import Loginpage from "./components/login-page";
 import Welcome from "./components/welcome-page";
+import UpdatePagee from "./components/update-page";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path="/header" element={<Header />} />
             <Route path="/userpage" element={<Userpage />} />
             <Route path="/createpage" element={<Createpage />} />
+            <Route path="/update-page" element={<UpdatePagee />} />
 
           </Routes>
 
