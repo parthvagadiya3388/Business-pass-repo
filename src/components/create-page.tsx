@@ -1,14 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Header from "./header";
-import { AiTwotoneDashboard } from "react-icons/ai";
-import { PiUsersThreeBold } from "react-icons/pi";
-import { TbUsers } from "react-icons/tb";
 import { Card, Col, Container, InputGroup, Row, Form, Button } from "react-bootstrap";
 import { BsBagCheck } from "react-icons/bs";
 import { API_URL } from "../config";
 import { useFormik, FormikHelpers } from "formik";
 import schema from "../validation/validation-schema";
+import Header from "./header";
+import Sidebar from "./side-bar";
+import useUserStore from "../zustandstore/userApisStore";
 
 interface FormValues {
   name: string;
@@ -28,43 +27,58 @@ const initialValues: FormValues = {
   phone_number: "",
   key: "",
   user_type: "Business",
-  password: "12345678",
-  confirm_password: "12345678",
+  password: "",
+  confirm_password: "",
 };
 
-export default function Createpage() {
-  const [error, setErrors] = useState({} as Record<string, string>);
+export default function CreatePage() {
+  const [error, setError] = useState({} as Record<string, string>);
   const navigate = useNavigate();
+  const { selectedUser , clearSelectedUser } = useUserStore();
+
+  console.log("selectUser---" , selectedUser);
 
   const formik = useFormik<FormValues>({
-    initialValues,
+    initialValues: selectedUser || initialValues,
     validationSchema: schema,
     onSubmit: async (values, { resetForm }: FormikHelpers<FormValues>) => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`${API_URL}/users/`, {
-          method: 'POST',
+        const url = selectedUser ? `${API_URL}/users/${selectedUser.id}/` : `${API_URL}/users/`;
+        const method = selectedUser ? 'PATCH' : 'POST';
+
+        const response = await fetch(url, {
+          method,
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
-           },
+          },
           body: JSON.stringify(values),
         });
 
         if (response.status === 400) {
           const errorData = await response.json();
-          setErrors(errorData.errors);
+          setError(errorData.errors);
           return;
         }
 
         resetForm();
+        if (selectedUser) {
+          clearSelectedUser();
+        }
         navigate('/userpage');
       } catch (error) {
         console.error('Error:', error);
       }
-    }
+    },
   });
+
+  useEffect(() => {
+    if (selectedUser) {
+      formik.setValues(selectedUser);
+    }
+  }, [selectedUser]);
 
   return (
     <>
@@ -72,40 +86,7 @@ export default function Createpage() {
       <Container fluid>
         <Row>
           <Col md={3}>
-            <div className="Profile_Side_bar border_radius">
-              <ul className="nav flex-column">
-                <li className="nav-item">
-                  <Link className="nav-link btn btn-primary radius text-start text-dark border_radius" to="#">
-                    <AiTwotoneDashboard /> Dashboard
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link active btn btn-primary radius text-start text-white border_radius" to="#">
-                    <PiUsersThreeBold /> Users
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link text-dark btn btn-primary radius text-start text-dark border_radius" to="#">
-                    <PiUsersThreeBold /> Activate accounts
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link text-dark btn btn-primary radius text-start border_radius" to="#">
-                    <TbUsers /> Explore membership
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link text-dark btn btn-primary radius text-start border_radius" to="#">
-                    <TbUsers /> For Workspaces
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link text-dark btn btn-primary radius text-start border_radius" to="#">
-                    <TbUsers /> For Communities
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            <Sidebar />
           </Col>
 
           <Col className="bg-light align-content-center" md={9}>
@@ -118,14 +99,12 @@ export default function Createpage() {
 
             <Card className="bg-light p-4 border_radius">
               <Row>
-                <p><BsBagCheck className="mb-2" /> <strong>Create User</strong></p>   
+                <p><BsBagCheck className="mb-2" /> <strong>{selectedUser ? 'Update User' : 'Create User'}</strong></p>   
                 <Form onSubmit={formik.handleSubmit}>
                   <div className="d-flex flex-wrap">
                     <Col md={12}>
                       <Form.Group className="mb-3">
-                        <Form.Label>
-                          <strong>Name</strong>
-                        </Form.Label>
+                        <Form.Label><strong>Name</strong></Form.Label>
                         <InputGroup>
                           <Form.Control
                             className={`radius border_radius ${formik.touched.name && formik.errors.name ? 'border-danger' : ''}`}
@@ -142,13 +121,11 @@ export default function Createpage() {
 
                     <Col md={12}>
                       <Form.Group className="mb-3">
-                        <Form.Label>
-                          <strong>Email</strong>
-                        </Form.Label>
+                        <Form.Label><strong>Email</strong></Form.Label>
                         <InputGroup>
                           <Form.Control
                             className={`radius border_radius ${formik.touched.email && formik.errors.email ? 'border-danger' : ''}`}
-                            type="text"
+                            type="email"
                             placeholder="Enter your email"
                             id="email"
                             {...formik.getFieldProps('email')}
@@ -160,9 +137,7 @@ export default function Createpage() {
                     </Col>
 
                     <Col md={6}>
-                      <Form.Label>
-                        <strong>Country</strong>
-                      </Form.Label>
+                      <Form.Label><strong>Country</strong></Form.Label>
                       <select
                         className={`form-select radius border_radius ${formik.touched.country && formik.errors.country ? 'border-danger' : ''}`}
                         id="country"
@@ -178,9 +153,7 @@ export default function Createpage() {
 
                     <Col md={6}>
                       <Form.Group className="mb-3">
-                        <Form.Label>
-                          <strong>Phone</strong>
-                        </Form.Label>
+                        <Form.Label><strong>Phone</strong></Form.Label>
                         <InputGroup>
                           <Form.Control
                             className={`radius border_radius ${formik.touched.phone_number && formik.errors.phone_number ? 'border-danger' : ''}`}
@@ -197,9 +170,7 @@ export default function Createpage() {
 
                     <Col md={6}>
                       <Form.Group className="mb-3">
-                        <Form.Label>
-                          <strong>Key</strong>
-                        </Form.Label>
+                        <Form.Label><strong>Key</strong></Form.Label>
                         <InputGroup>
                           <Form.Control
                             className={`radius border_radius ${formik.touched.key && formik.errors.key ? 'border-danger' : ''}`}
@@ -214,9 +185,7 @@ export default function Createpage() {
                     </Col>
 
                     <Col md={6}>
-                      <Form.Label>
-                        <strong>User Type</strong>
-                      </Form.Label>
+                      <Form.Label><strong>User Type</strong></Form.Label>
                       <select
                         className={`form-select radius border_radius ${formik.touched.user_type && formik.errors.user_type ? 'border-danger' : ''}`}
                         id="user_type"
@@ -232,9 +201,7 @@ export default function Createpage() {
 
                     <Col md={6}>
                       <Form.Group >
-                        <Form.Label>
-                          <strong>Password</strong>
-                        </Form.Label>
+                        <Form.Label><strong>Password</strong></Form.Label>
                         <InputGroup>
                           <Form.Control
                             className={`radius border_radius ${formik.touched.password && formik.errors.password ? 'border-danger' : ''}`}
@@ -250,9 +217,7 @@ export default function Createpage() {
 
                     <Col md={6}>
                       <Form.Group >
-                        <Form.Label>
-                          <strong>Confirm Password</strong>
-                        </Form.Label>
+                        <Form.Label><strong>Confirm Password</strong></Form.Label>
                         <InputGroup>
                           <Form.Control
                             className={`radius border_radius ${formik.touched.confirm_password && formik.errors.confirm_password ? 'border-danger' : ''}`}
@@ -268,7 +233,7 @@ export default function Createpage() {
 
                     <div className="container text-end">
                       <Button className="Submit_button p-2 border_radius" variant="primary" type="submit">
-                          Create
+                        {selectedUser ? 'Update' : 'Create'}
                       </Button>
                     </div>
                   </div>
