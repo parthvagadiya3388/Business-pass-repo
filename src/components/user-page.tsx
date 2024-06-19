@@ -5,23 +5,22 @@ import { Alert, Button, Card, Col, Container, Modal, Row, Table } from "react-bo
 import { FaEye } from 'react-icons/fa';
 import { TiEdit } from 'react-icons/ti';
 import { MdDeleteForever } from 'react-icons/md';
-import { AiTwotoneDashboard } from 'react-icons/ai';
-import { PiUsersThreeBold } from 'react-icons/pi';
-import { TbUsers } from 'react-icons/tb';
 import useUserStore from '../zustandstore/userApisStore';
+import Sidebar from './side-bar';
 
 export default function User() {
-  const { users, error , userApis, deleteUserApis, setSelectedUser } = useUserStore();
+  const { users, error, userApis, deleteUserApis, setSelectedUser } = useUserStore();
   const [searchInput, setSearchInput] = useState("");
   const [show, setShow] = useState<boolean>(false);
   const [userToDelete, setUserToDelete] = useState<any>(null);
   const [actionType, setActionType] = useState<string>("");
 
+
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
   
-  console.log("data---2-------------------",userToDelete);
-  console.log("actionType***************",actionType)
+  // console.log("data---2-------------------", userToDelete);
+  // console.log("actionType***************", actionType)
 
   const handleClose = () => setShow(false);
 
@@ -41,9 +40,14 @@ export default function User() {
     setSearchInput(e.target.value);
   };
 
-  const handleEdit = (user: any) => {
+  // const handleEdit = (user: any) => {
+  //   setSelectedUser(user);
+  //   navigate('/createpage');
+  // };
+   const handleEdit = (user: any) => {
+    localStorage.setItem("selectedUser", JSON.stringify(user));
     setSelectedUser(user);
-    navigate('/update-page');
+    navigate('/createpage');
   };
 
   const handleDelete = async () => {
@@ -52,6 +56,11 @@ export default function User() {
       setShow(false);
     }
   };
+  const handelAdd = () => {
+    localStorage.removeItem("selectedUser"); // Remove selectedUser from localStorage
+    setSelectedUser(null); // Clear selectedUser in Zustand
+    navigate('/createpage');
+  };
 
   return (
     <div>
@@ -59,40 +68,7 @@ export default function User() {
       <Container fluid className=''>
         <Row>
           <Col md={3} className=''>
-            <div className="Profile_Side_bar border_radias">
-              <ul className="nav flex-column">
-                <li className="nav-item">
-                  <Link className="nav-link btn btn-primary radius text-start text-dark border_radius" to="#">
-                    <AiTwotoneDashboard className='' /> Dashboard
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link active btn btn-primary radius text-start text-white border_radius" to="#">
-                    <PiUsersThreeBold /> Users
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link text-dark btn btn-primary radius text-start text-dark border_radius" to="#">
-                    <PiUsersThreeBold /> Activate accounts
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link text-dark btn btn-primary radius text-start border_radius" to="#">
-                    <TbUsers /> Explore membership
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link text-dark btn btn-primary radius text-start border_radius" to="#">
-                    <TbUsers /> For Workspaces
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link text-dark btn btn-primary radius text-start border_radius" to="#">
-                    <TbUsers /> For Communities
-                  </Link>
-                </li>
-              </ul>
-            </div>
+                <Sidebar/>
           </Col>
 
           <Col className="wlc_card bg-light" md={9}>
@@ -111,7 +87,7 @@ export default function User() {
                     onChange={handleSearchInputChange}
                   />
                 </div>
-                <Button className='border_radias form-control Input_button_emp border_radius'>
+                <Button className='border_radias form-control Input_button_emp border_radius' onClick={handelAdd}>
                   <Link to='/createpage' className='text-white text-decoration-none link_tag'>Add User</Link>
                 </Button>
               </Col>
@@ -150,7 +126,7 @@ export default function User() {
                           <FaEye />
                         </button>
                         <button className='border-0 bg-transparent text-dark' onClick={() => handleEdit(user)}>
-                          <TiEdit /> 
+                          <TiEdit /> edit
                         </button>
                         <button className='border-0 bg-transparent text-dark' onClick={() => handleShow(user, 'delete')}>
                           <MdDeleteForever />
