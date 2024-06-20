@@ -1,41 +1,30 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Header from "./components/header";
 import Userpage from "./components/user-page";
 import Createpage from "./components/create-page";
 import Loginpage from "./components/login-page";
 import Welcome from "./components/welcome-page";
-import ProtectedRoute from "./components/protectedRoute";
+import useLoginStore from './zustandstore/loginApiStore';
 
 function App() {
+  const isAuthenticated = useLoginStore(state => state.isAuthenticated);
+
   return (
-    <>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Welcome />} />
-          <Route path="/login" element={<Loginpage />} />
-          <Route path="/header" element={<Header />} />
-          <Route
-            path="/userpage"
-            element={
-              <ProtectedRoute>
-                <Userpage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/createpage"
-            element={
-              <ProtectedRoute>
-                <Createpage />
-              </ProtectedRoute>
-            }
-          />
-     
-        </Routes>
-      </Router>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Welcome />} />
+        <Route path="/login" element={isAuthenticated ? <Navigate to="/userpage" /> : <Loginpage />} />
+        <Route path="/header" element={<Header />} />
+        {isAuthenticated ? (
+          <>
+            <Route path="/userpage" element={<Userpage />} />
+            <Route path="/createpage" element={<Createpage />} />
+          </>
+        ) : null}
+      </Routes>
+    </Router>
   );
 }
 
