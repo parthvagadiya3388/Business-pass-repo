@@ -34,12 +34,12 @@ const initialValues: FormValues = {
 export default function CreatePage() {
   const [error, setError] = useState({} as Record<string, string>);
   const navigate = useNavigate();
-  const { selectedUser , clearSelectedUser } = useUserStore();
+  const { selectedUser, clearSelectedUser } = useUserStore();
 
-  console.log("selectUser---" , selectedUser);
+  console.log("selectUser---", selectedUser);
 
   const formik = useFormik<FormValues>({
-    initialValues: selectedUser || initialValues,
+    initialValues: selectedUser ? { ...selectedUser, password: "", confirm_password: "" } : initialValues,
     validationSchema: schema,
     onSubmit: async (values, { resetForm }: FormikHelpers<FormValues>) => {
       try {
@@ -76,7 +76,7 @@ export default function CreatePage() {
 
   useEffect(() => {
     if (selectedUser) {
-      formik.setValues(selectedUser);
+      formik.setValues({ ...selectedUser, password: "", confirm_password: "" });
     }
   }, [selectedUser]);
 
@@ -115,7 +115,7 @@ export default function CreatePage() {
                           />
                         </InputGroup>
                         {formik.touched.name && formik.errors.name && <div className="text-danger">{formik.errors.name}</div>}
-                        {error && <div className="text-danger">{error.name}</div>}
+                        {error.name && <div className="text-danger">{error.name}</div>}
                       </Form.Group>
                     </Col>
 
@@ -132,7 +132,7 @@ export default function CreatePage() {
                           />
                         </InputGroup>
                         {formik.touched.email && formik.errors.email && <div className="text-danger">{formik.errors.email}</div>}
-                        {error && <div className="text-danger">{error.email}</div>}
+                        {error.email && <div className="text-danger">{error.email}</div>}
                       </Form.Group>
                     </Col>
 
@@ -148,7 +148,7 @@ export default function CreatePage() {
                         <option value="USA">USA</option>
                       </select>
                       {formik.touched.country && formik.errors.country && <div className="text-danger">{formik.errors.country}</div>}
-                      {error && <div className="text-danger">{error.country}</div>}
+                      {error.country && <div className="text-danger">{error.country}</div>}
                     </Col>
 
                     <Col md={6}>
@@ -164,7 +164,7 @@ export default function CreatePage() {
                           />
                         </InputGroup>
                         {formik.touched.phone_number && formik.errors.phone_number && <div className="text-danger">{formik.errors.phone_number}</div>}
-                        {error && <div className="text-danger">{error.phone_number}</div>}
+                        {error.phone_number && <div className="text-danger">{error.phone_number}</div>}
                       </Form.Group>
                     </Col>
 
@@ -196,7 +196,7 @@ export default function CreatePage() {
                         <option value="Personal">Personal</option>
                       </select>
                       {formik.touched.user_type && formik.errors.user_type && <div className="text-danger">{formik.errors.user_type}</div>}
-                      {error && <div className="text-danger">{error.user_type}</div>}
+                      {error.user_type && <div className="text-danger">{error.user_type}</div>}
                     </Col>
 
                     <Col md={6}>
