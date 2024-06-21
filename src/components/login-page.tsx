@@ -26,7 +26,7 @@ export default function Loginpage() {
   };
 
   return (
-    <div>
+    <Col>
       <Mainheader />
       <Container fluid>
         <Row>
@@ -34,7 +34,7 @@ export default function Loginpage() {
             <Card className="p-4 main_card">
               <h2><strong>Welcome Back</strong></h2>
               <p>Please Enter Your Details</p>
-              <div className="d-flex">
+              <Col className="d-flex">
                 <Button className="col-6 button bg-light text-dark Submit_button border-0 btn-outline-primary">
                   <label className="w-100 h-100 mt-1 bussines_button">
                     <input type="radio" name="for" defaultChecked /> For Business
@@ -45,7 +45,7 @@ export default function Loginpage() {
                     <input type="radio" name="for" /> For Enquiry
                   </label>
                 </Button>
-              </div>
+              </Col>
               <br />
               <Form onSubmit={handleSubmit}>
                 {error && <Alert variant="danger">{error}</Alert>}
@@ -62,7 +62,7 @@ export default function Loginpage() {
                       onChange={(e) => setUsernameOrEmail(e.target.value)}
                     />
                   </InputGroup>
-                  {usernameError && <div className='text-danger'>{usernameError}</div>}
+                  {usernameError && <Col className='text-danger p-0'>{usernameError}</Col>}
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="password">
@@ -77,7 +77,7 @@ export default function Loginpage() {
                       onChange={(e) => setPassword(e.target.value)}
                     />
                   </InputGroup>
-                  {passwordError && <div className='text-danger'>{passwordError}</div>}
+                  {passwordError && <Col className='text-danger p-0'>{passwordError}</Col>}
                 </Form.Group>
 
                 <Button className="Submit_button w-100" variant="primary" type="submit">
@@ -92,6 +92,6 @@ export default function Loginpage() {
           </Col>
         </Row>
       </Container>
-    </div>
+    </Col>
   );
 }
