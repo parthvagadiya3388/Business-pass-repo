@@ -15,7 +15,7 @@ export default function User() {
   const [userToDelete, setUserToDelete] = useState<any>(null);
   const [actionType, setActionType] = useState<string>("");
 
-
+  
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
   
@@ -40,10 +40,6 @@ export default function User() {
     setSearchInput(e.target.value);
   };
 
-  // const handleEdit = (user: any) => {
-  //   setSelectedUser(user);
-  //   navigate('/createpage');
-  // };
    const handleEdit = (user: any) => {
     localStorage.setItem("selectedUser", JSON.stringify(user));
     setSelectedUser(user);
@@ -57,13 +53,13 @@ export default function User() {
     }
   };
   const handelAdd = () => {
-    localStorage.removeItem("selectedUser"); // Remove selectedUser from localStorage
-    setSelectedUser(null); // Clear selectedUser in Zustand
+    localStorage.removeItem("selectedUser"); 
+    setSelectedUser(null); 
     navigate('/createpage');
   };
 
   return (
-    <div>
+    <Col>
       <Header />
       <Container fluid className=''>
         <Row>
@@ -72,12 +68,12 @@ export default function User() {
           </Col>
 
           <Col className="wlc_card bg-light" md={9}>
-            <div className='main_card List_card d-flex justify-content-between flex-wrap'>
+            <Col className='main_card List_card d-flex justify-content-between flex-wrap p-0'>
               <Col md={5} sm={12} className='Employr_title p-0 align-content-center'>
                 <h4> Users</h4>
               </Col>
               <Col md={7} sm={12} className='d-flex justify-content-between flex-wrap w-100 p-0 mt-2'>
-                <div className="form-group has-search Input_button_emp">
+                <Col className="form-group has-search Input_button_emp p-0 mr-1">
                   <span className="fa fa-search form-control-feedback"></span>
                   <input
                     type="text"
@@ -86,14 +82,14 @@ export default function User() {
                     value={searchInput}
                     onChange={handleSearchInputChange}
                   />
-                </div>
+                </Col>
                 <Button className='border_radias form-control Input_button_emp border_radius' onClick={handelAdd}>
                   <Link to='/createpage' className='text-white text-decoration-none link_tag'>Add User</Link>
                 </Button>
               </Col>
-            </div>
+            </Col>
             <br />
-            <div className="table-responsive">
+            <Col className="table-responsive p-0">
               <table className="table table-hover w-100 table_Div table-striped">
                 <thead className="thead-light">
                   <tr className='Table_header'>
@@ -126,7 +122,7 @@ export default function User() {
                           <FaEye />
                         </button>
                         <button className='border-0 bg-transparent text-dark' onClick={() => handleEdit(user)}>
-                          <TiEdit /> edit
+                          <TiEdit />
                         </button>
                         <button className='border-0 bg-transparent text-dark' onClick={() => handleShow(user, 'delete')}>
                           <MdDeleteForever />
@@ -137,19 +133,19 @@ export default function User() {
                 </tbody>
               </table>
               {error && <Alert variant="danger">{error}</Alert>}
-            </div>
+            </Col>
           </Col>
 
           <Modal show={show} onHide={handleClose}>
             <Card className="p-4 togl_card">
-              <div className="d-flex">
+              <Col className="d-flex p-0">
                 <Col md={10} className="p-0">
                   <h3><strong> {actionType === 'invite' ? 'Invite User' : 'Delete User'} </strong></h3>
                 </Col>
                 <Col md={2} className="text-end">
                   <button type="button" className="btn-close toggle_button m-2 ml-2" onClick={handleClose}></button>
                 </Col>
-              </div>
+              </Col>
               <p>Are you sure you want to user?</p>
               <Table>
                 <tbody>
@@ -192,6 +188,6 @@ export default function User() {
 
         </Row>
       </Container>
-    </div>
+    </Col>
   );
 }
