@@ -7,12 +7,14 @@ import Createpage from "./components/create-page";
 import Loginpage from "./components/login-page";
 import Welcome from "./components/welcome-page";
 import useLoginStore from './zustandstore/loginApiStore';
+import PasswordForgot from "./components/password-forgot";
 
 function App() {
   const isAuthenticated = useLoginStore(state => state.isAuthenticated);
 
   return (
     <Router>
+
       <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/login" element={isAuthenticated ? <Navigate to="/userpage" /> : <Loginpage />} />
@@ -21,6 +23,7 @@ function App() {
           <>
             <Route path="/userpage" element={<Userpage />} />
             <Route path="/createpage" element={<Createpage />} />
+            <Route path="/pwdfor" element={<PasswordForgot />} />
           </>
         ) : null}
       </Routes>
