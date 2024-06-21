@@ -3,8 +3,10 @@ import useLoginStore from "../zustandstore/loginApiStore";
 import { AiTwotoneDashboard } from "react-icons/ai";
 import { PiUsersThreeBold } from "react-icons/pi";
 import { TbUsers } from "react-icons/tb";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Col, Modal } from "react-bootstrap";
 import { useState } from "react";
+import { FaUser } from "react-icons/fa";
+
 
 export default function Sidebar() {
     const { logout } = useLoginStore();
@@ -26,11 +28,16 @@ export default function Sidebar() {
     };
 
   return (
-    <div className="Profile_Side_bar border_radias">
+    <Col className="Profile_Side_bar border_radias">
               <ul className="nav flex-column">
                 <li className="nav-item">
                   <Link className="nav-link btn btn-primary radius text-start text-dark border_radius" to="#">
                     <AiTwotoneDashboard className='' /> Dashboard
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link btn btn-primary radius text-start text-dark border_radius" to="/pwdfor">
+                    <FaUser className='' /> Personal information
                   </Link>
                 </li>
                 <li className="nav-item">
@@ -80,6 +87,6 @@ export default function Sidebar() {
                 </Modal>
 
               </ul>
-            </div>
+            </Col>
   )
 }
