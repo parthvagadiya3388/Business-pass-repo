@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-const schema = yup.object().shape({
+export const schema = yup.object().shape({
     name: yup.string().trim().required("Name is a required field*"),
     email: yup.string().email("Invalid email format").required("Email is a required field*"),
     country: yup.string().required("Country is a required field*"),
@@ -13,4 +13,14 @@ const schema = yup.object().shape({
       .required("Confirm password is a required field*"),
 });
 
-export default schema;
+
+export const passwordChangeSchema = yup.object().shape({
+    oldPassword: yup.string().required('Current password is required'),
+    newPassword: yup.string()
+      .required('New password is required')
+      .min(8, 'Password must be at least 8 characters long'),
+    confirmPassword: yup.string()
+      .oneOf([yup.ref('newPassword')], 'Passwords must match')
+      .required('Please confirm your new password'),
+  });
+
