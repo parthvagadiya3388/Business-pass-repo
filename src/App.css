@@ -110,7 +110,7 @@
     object-fit: cover;
   }
   .main_card{
-    margin-top: 10px;
+    margin-top: 0px;
   }
   .Footer_Conteiner{
     margin-top: 20px !important;
@@ -121,3 +121,64 @@
   }
 }
 
+.text_sidebar{
+  color: #000000 !important;
+}
+.text_sidebar:hover {
+  color: white !important;
+}
+
+/* ---------------------------------------------------header page------------------------------------------------- */
+
+/* Add this CSS to your stylesheet */
+.navbar-brand {
+  font-weight: bold;
+}
+
+.dropdown-menu {
+  min-width: 200px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-item .me-2 {
+  margin-right: 8px;
+}
+
+img.rounded-circle {
+  width: 40px;
+  height: 40px;
+}
+
+.text-danger {
+  color: #dc3545 !important;
+}
+
+/* --------------------------------------------------------personal inforanmation---------------------------- */
+
+.Product_imag_profile{
+  width: 140px !important;
+  height: 140px !important;
+}
+@media only screen and (max-width: 575px) {
+  .Product_imag_profile{
+    margin: auto;
+  }
+  .Prof_name{
+    width: 100%;
+    text-align: center;
+  }
+  .Prof_compnay_name{
+    text-align: center;
+  }
+  .Profile_button_div{
+    
+    width: 100% !important;
+    text-align: center !important;
+  }
+}
