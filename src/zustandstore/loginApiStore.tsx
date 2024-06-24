@@ -34,7 +34,7 @@ const useLoginStore = create<UserState>((set) => ({
         const token = response.data.tokens.access;
         localStorage.setItem('token', token);
         set({ isAuthenticated: true });
-        navigate(`/userpage`);
+        navigate(`/userlist`);
       }
       
     } catch (error: any) {
