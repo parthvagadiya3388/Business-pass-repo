@@ -1,91 +1,45 @@
-import { Link, useNavigate } from "react-router-dom";
-import useLoginStore from "../zustandstore/loginApiStore";
+import { Link } from "react-router-dom";
 import { AiTwotoneDashboard } from "react-icons/ai";
 import { PiUsersThreeBold } from "react-icons/pi";
 import { TbUsers } from "react-icons/tb";
-import { Button, Col, Modal } from "react-bootstrap";
-import { useState } from "react";
-import { FaUser } from "react-icons/fa";
+import { Col } from "react-bootstrap";
 
 
 export default function Sidebar() {
-    const { logout } = useLoginStore();
-    const navigate = useNavigate();
-    const [show, setShow] = useState<boolean>(false);
-
-
-    const handleLogout = () => {
-        logout();
-        navigate('/login');
-      };    
-
-    const handleShow = () => {
-        setShow(true); 
-    };
-
-    const handleClose = () => {
-        setShow(false);
-    };
-
   return (
-    <Col className="Profile_Side_bar border_radias">
+    <Col className="Profile_Side_bar border_radias p-0">
               <ul className="nav flex-column">
                 <li className="nav-item">
-                  <Link className="nav-link btn btn-primary radius text-start text-dark border_radius" to="#">
+                  <Link className="nav-link btn btn-primary radius text-start border_radius text_sidebar" to="#">
                     <AiTwotoneDashboard className='' /> Dashboard
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link btn btn-primary radius text-start text-dark border_radius" to="/pwdfor">
-                    <FaUser className='' /> Personal information
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link active btn btn-primary radius text-start text-white border_radius" to="#">
+                  <Link className="nav-link active btn btn-primary radius text-start text-white border_radius text_sidebar" to="#">
                     <PiUsersThreeBold /> Users
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link text-dark btn btn-primary radius text-start text-dark border_radius" to="#">
+                  <Link className="nav-link btn btn-primary radius text-start border_radius text_sidebar" to="#">
                     <PiUsersThreeBold /> Activate accounts
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link text-dark btn btn-primary radius text-start border_radius" to="#">
+                  <Link className="nav-link btn btn-primary radius text-start border_radius text_sidebar" to="#">
                     <TbUsers /> Explore membership
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link text-dark btn btn-primary radius text-start border_radius" to="#">
+                  <Link className="nav-link btn btn-primary radius text-start border_radius text_sidebar" to="#">
                     <TbUsers /> For Workspaces
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link text-dark btn btn-primary radius text-start border_radius" to="#">
+                  <Link className="nav-link btn btn-primary radius text-start border_radius text_sidebar" to="#">
                     <TbUsers /> For Communities
                   </Link>
                 </li>
-                <li className="nav-item">
-                  <Button className="w-100 nav-link text-dark btn btn-primary radius text-start border_radius" onClick={() => handleShow()}>
-                    <TbUsers /> Log out
-                  </Button>
-                </li>
-
-                <Modal show={show} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Confirm Logout</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>Are you sure you want to log out?</Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>
-                            Cancel
-                        </Button>
-                        <Button variant="danger" onClick={handleLogout}>
-                            Logout
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-
+          
               </ul>
             </Col>
   )
