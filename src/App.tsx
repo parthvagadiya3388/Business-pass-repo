@@ -8,13 +8,19 @@ import useLoginStore from './zustandstore/loginApiStore';
 import Userlist from "./components/user-list";
 import Adduser from "./components/add-users";
 import Personalinfo from "./components/personal-info";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 function App() {
   const isAuthenticated = useLoginStore(state => state.isAuthenticated);
 
   return (
-    <Router>
+    <HelmetProvider>
 
+    <Router>
+      <Helmet>
+          <title>Businesspass</title>
+      </Helmet>
+      
       <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/login" element={isAuthenticated ? <Navigate to="/userlist" /> : <Loginpage />} />
@@ -28,6 +34,8 @@ function App() {
         ) : null}
       </Routes>
     </Router>
+
+    </HelmetProvider>
   );
 }
 
