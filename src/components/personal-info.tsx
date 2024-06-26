@@ -12,6 +12,7 @@ import { passwordChangeSchema } from "../validation/validation-schema";
 import { MdEmail, MdOutlineDeleteOutline } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
 import { CiUser } from "react-icons/ci";
+import { Helmet } from "react-helmet-async";
 
 interface FormValues {
   oldPassword: string;
@@ -82,6 +83,10 @@ export default function Personalinfo() {
 
   return (
     <>  
+       <Helmet>
+          <title>{activeSection === "personalInformation"  ? "Personal Information" : "Change Password"}</title>
+      </Helmet>
+
       <Header />
       <Container>
         <Row>
