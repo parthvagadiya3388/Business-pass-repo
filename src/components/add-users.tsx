@@ -8,6 +8,7 @@ import Header from "./header";
 import Sidebar from "./side-bar";
 import useUserStore from "../zustandstore/userApisStore";
 import { schema } from "../validation/validation-schema";
+import { Helmet } from "react-helmet-async";
 
 interface FormValues {
   name: string;
@@ -92,9 +93,14 @@ export default function Adduser() {
       }
     }
   }, [selectedUser, setSelectedUser]);
-
+  
+  
   return (
     <>
+      <Helmet>
+          <title>{selectedUser ? "Update User" : "Add User"}</title>
+      </Helmet>
+      
       <Header />  
       <Container>
         <Row>
@@ -106,7 +112,7 @@ export default function Adduser() {
             <Col className="d-flex justify-content-between p-0 pt-2 pb-2">
               <h3>Users</h3>
               <Button className="Submit_button p-2 border_radius" variant="primary">
-                <Link to='/userlist' className="w-100 text-white text-decoration-none">Back</Link>
+                <Link to='/userlist' className="w-100 text-white text-decoration-none back_button">Back</Link>
               </Button>
             </Col>
 
@@ -247,7 +253,7 @@ export default function Adduser() {
                     </Col>
 
                     <Col className="container text-end mt-4">
-                      <Button className="Submit_button p-2 border_radius" variant="primary" type="submit">
+                      <Button className="Submit_button border_radius pt-2 pb-2" variant="primary" type="submit">
                         {selectedUser ? 'Update' : 'Create'}
                       </Button>
                     </Col>
