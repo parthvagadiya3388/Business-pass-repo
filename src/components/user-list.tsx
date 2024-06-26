@@ -7,6 +7,7 @@ import { TiEdit } from 'react-icons/ti';
 import { MdDeleteForever } from 'react-icons/md';
 import useUserStore from '../zustandstore/userApisStore';
 import Sidebar from './side-bar';
+import { Helmet } from 'react-helmet-async';
 
 export default function Userlist() {
   const { users, error, userApis, deleteUserApis, setSelectedUser } = useUserStore();
@@ -57,9 +58,16 @@ export default function Userlist() {
     setSelectedUser(null); 
     navigate('/adduser');
   };
+  // useEffect(() => {
+  //   document.title = 'Users';
+  // }, []);
 
   return (
     <Col>
+      <Helmet>
+          <title>Users</title>
+      </Helmet>
+      
       <Header />
       <Container  className=''>
         <Row>
