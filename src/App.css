@@ -182,3 +182,7 @@ img.rounded-circle {
     text-align: center !important;
   }
 }
+
+.back_button{
+  padding: 10px;
+}
