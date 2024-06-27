@@ -69,7 +69,12 @@ export default function Adduser() {
         resetForm();
         if (selectedUser) {
           clearSelectedUser();
+        }else {
+          const users = JSON.parse(localStorage.getItem('users') || '[]');
+          users.push(values);
+          localStorage.setItem('users', JSON.stringify(users));
         }
+        
         navigate('/userlist');
       } catch (error) {
         console.error('Error:', error);
@@ -118,11 +123,11 @@ export default function Adduser() {
 
             <Card className="bg-light p-4 border_radius">
               <Row>
-                <p><BsBagCheck className="mb-2" /> <strong>
+                <p className="pl-4"><BsBagCheck className="mb-2" /> <strong>
                   {selectedUser ? 'Update User' : 'Create User'}
                   </strong></p>   
                 <Form onSubmit={formik.handleSubmit}>
-                  <Col className="d-flex flex-wrap">
+                  <Col className="d-flex flex-wrap p-0">
                     <Col md={12}>
                       <Form.Group className="mb-3">
                         <Form.Label><strong>Name</strong></Form.Label>
