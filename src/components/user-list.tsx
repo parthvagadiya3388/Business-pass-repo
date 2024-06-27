@@ -16,11 +16,12 @@ export default function Userlist() {
   const [userToDelete, setUserToDelete] = useState<any>(null);
   const [actionType, setActionType] = useState<string>("");
 
+
   
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
   
-  // console.log("data---2-------------------", userToDelete);
+  console.log("data---userdata-------------------", users);
   // console.log("actionType***************", actionType)
 
   const handleClose = () => setShow(false);
@@ -71,7 +72,7 @@ export default function Userlist() {
       <Header />
       <Container  className=''>
         <Row>
-          <Col md={3} className='p-0'>
+          <Col md={3} className=''>
                 <Sidebar/>
           </Col>
 
