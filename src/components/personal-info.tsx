@@ -30,6 +30,8 @@ export default function Personalinfo() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [activeSection, setActiveSection] = useState("personalInformation");
+  const [email, setEmail] = useState(localStorage.getItem('email') || '');
+  const [username, setUsername] = useState(localStorage.getItem('username') || '');
 
   const formik = useFormik<FormValues>({
     initialValues,
@@ -202,7 +204,7 @@ export default function Personalinfo() {
                 </div>
                 <div className="card-body col-sm-8">
                   <Col className="d-flex justify-content-between align-items-center p-0">
-                    <h4 className="card-title Prof_name">Admin_1</h4>
+                    <h4 className="card-title Prof_name">{username}</h4>
                   </Col>
                   <p className="card-text p-0 m-0 Prof_compnay_name">India</p> <br />
                   <div className='Profile_button_div'>
@@ -270,6 +272,8 @@ export default function Personalinfo() {
                           type="email"
                           placeholder="Enter your Email"
                           id="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
                         />
                       </InputGroup>
                     </Form.Group>
