@@ -30,9 +30,15 @@ const useLoginStore = create<UserState>((set) => ({
       const { username_or_email, password } = useLoginStore.getState();
       const response = await axios.post(`${API_URL}/login/`, { username_or_email, password });
 
+      console.log("login responces-----------",response.data);
+
       if (response.status === 200) {
         const token = response.data.tokens.access;
+        const username = response.data.username;
+        const email = response.data.email;
         localStorage.setItem('token', token);
+        localStorage.setItem('username',username);
+        localStorage.setItem('email',email);
         set({ isAuthenticated: true });
         navigate(`/userlist`);
       }
@@ -52,6 +58,8 @@ const useLoginStore = create<UserState>((set) => ({
 
   logout: () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    localStorage.removeItem('email');
     set({ isAuthenticated: false, username_or_email: '', password: '', error: '', usernameError: '', passwordError: '' });
   }
 }));
