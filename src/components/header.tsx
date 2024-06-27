@@ -10,6 +10,7 @@ const Header: React.FC = () => {
   const { logout } = useLoginStore();
   const navigate = useNavigate();
   const [show, setShow] = useState<boolean>(false);
+  const [username, setUsername] = useState(localStorage.getItem('username') || '');
 
   const handleLogout = () => {
     logout();
@@ -58,7 +59,7 @@ const Header: React.FC = () => {
                   className="rounded-circle"
                   width="40"
                 />
-                <span className="ms-1 me-0">Admin_1</span>
+                <span className="ms-1 me-0">{username}</span>
               </Dropdown.Toggle>
 
               <Dropdown.Menu align="end" className="mt-2 border_radius">
