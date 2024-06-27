@@ -4,6 +4,7 @@ import Mainheader from "./main-header";
 import img1 from '../assets/images/cofee.jpg';
 import { Button, Card, Col, Container, Form, Image, Row, InputGroup, Alert } from "react-bootstrap";
 import useLoginStore from '../zustandstore/loginApiStore';
+import useUserStore from '../zustandstore/userApisStore';
 
 export default function Loginpage() {
   const navigate = useNavigate();
@@ -17,6 +18,9 @@ export default function Loginpage() {
     setPassword,
     login
   } = useLoginStore();
+  const { users } = useUserStore();
+
+  console.log("******************************************",users);
 
   // console.log(" //////////////////////////",username_or_email , password , error , usernameError , passwordError );
 
