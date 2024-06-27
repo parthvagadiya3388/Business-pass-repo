@@ -8,13 +8,13 @@ import useLoginStore from './zustandstore/loginApiStore';
 import Userlist from "./components/user-list";
 import Adduser from "./components/add-users";
 import Personalinfo from "./components/personal-info";
-import { Helmet, HelmetProvider } from "react-helmet-async";
+import { Helmet } from "react-helmet-async";
+import Notfound from "./components/404notfound-error";
 
 function App() {
   const isAuthenticated = useLoginStore(state => state.isAuthenticated);
 
   return (
-    <HelmetProvider>
 
     <Router>
       <Helmet>
@@ -32,10 +32,10 @@ function App() {
             <Route path="/personalinfo" element={<Personalinfo />} />
           </>
         ) : null}
+        <Route path="*" element={<Notfound/>} />
       </Routes>
     </Router>
 
-    </HelmetProvider>
   );
 }
 
