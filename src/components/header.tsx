@@ -10,7 +10,7 @@ const Header: React.FC = () => {
   const { logout } = useLoginStore();
   const navigate = useNavigate();
   const [show, setShow] = useState<boolean>(false);
-  const [username, setUsername] = useState(localStorage.getItem('username') || '');
+  const [username, setUsername] = useState(localStorage.getItem('username') || ''); 
 
   const handleLogout = () => {
     logout();
