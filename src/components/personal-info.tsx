@@ -10,7 +10,7 @@ import { PiUsersThreeBold } from "react-icons/pi";
 import { API_URL } from "../config";
 import { passwordChangeSchema } from "../validation/validation-schema";
 import { MdEmail, MdOutlineDeleteOutline } from "react-icons/md";
-import { FaUser } from "react-icons/fa";
+import {FaBusinessTime, FaPhoneAlt, FaUser } from "react-icons/fa";
 import { CiUser } from "react-icons/ci";
 import { Helmet } from "react-helmet-async";
 
@@ -32,6 +32,9 @@ export default function Personalinfo() {
   const [activeSection, setActiveSection] = useState("personalInformation");
   const [email, setEmail] = useState(localStorage.getItem('email') || '');
   const [username, setUsername] = useState(localStorage.getItem('username') || '');
+  const [phone, setPhone] = useState(localStorage.getItem('phone') || '');
+  const [country, setCountry] = useState(localStorage.getItem('country') || '');
+  const [user_type, setUser_type] = useState(localStorage.getItem('user_type') || '');
 
   const formik = useFormik<FormValues>({
     initialValues,
@@ -41,7 +44,7 @@ export default function Personalinfo() {
       setError("");
       setSuccess("");
 
-
+      
       try {
         const token = localStorage.getItem('token');
         const response = await fetch(`${API_URL}/change-password/`, {
@@ -206,7 +209,7 @@ export default function Personalinfo() {
                   <Col className="d-flex justify-content-between align-items-center p-0">
                     <h4 className="card-title Prof_name">{username}</h4>
                   </Col>
-                  <p className="card-text p-0 m-0 Prof_compnay_name">India</p> <br />
+                  <p className="card-text p-0 m-0 Prof_compnay_name">{country}</p> <br />
                   <div className='Profile_button_div'>
                     <a href="#" className="btn btn-light btn-outline-primary border_radius">
                       <MdOutlineDeleteOutline /> Change
@@ -220,60 +223,87 @@ export default function Personalinfo() {
 
               <Form>
                 <div className="d-flex flex-wrap pt-2">
-                  <Col md={6}>
+                  <Col md={12}>
                     <Form.Group className="mb-3">
                       <Form.Label>
-                        <strong>First Name</strong>
+                        <strong>Name</strong>
                       </Form.Label>
                       <InputGroup>
-                        <InputGroup.Text className="radius">
+                        <InputGroup.Text className="border_radius">
                           <FaUser />
                         </InputGroup.Text>
                         <Form.Control
-                          className="radius"
+                          className="border_radius"
                           type="text"
-                          placeholder="Enter your First Name"
+                          placeholder="Enter your Name"
                           id="firstname"
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
                         />
                       </InputGroup>
                     </Form.Group>
                   </Col>
 
-                  <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>
-                        <strong>Last Name</strong>
-                      </Form.Label>
-                      <InputGroup>
-                        <InputGroup.Text className="radius">
-                          <FaUser />
-                        </InputGroup.Text>
-                        <Form.Control
-                          className="radius"
-                          type="text"
-                          placeholder="Enter your Last Name"
-                          id="lastname"
-                        />
-                      </InputGroup>
-                    </Form.Group>
-                  </Col>
-
+                  
                   <Col md={12}>
                     <Form.Group className="mb-3">
                       <Form.Label>
                         <strong>Email</strong>
                       </Form.Label>
                       <InputGroup>
-                        <InputGroup.Text className="radius">
+                        <InputGroup.Text className="border_radius">
                           <MdEmail />
                         </InputGroup.Text>
                         <Form.Control
-                          className="radius"
+                          className="border_radius"
                           type="email"
                           placeholder="Enter your Email"
                           id="email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
+                        />
+                      </InputGroup>
+                    </Form.Group>
+                  </Col>
+
+
+                  <Col md={6}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>
+                        <strong>Phone</strong>
+                      </Form.Label>
+                      <InputGroup>
+                        <InputGroup.Text className="border_radius">
+                          <FaPhoneAlt />
+                        </InputGroup.Text>
+                        <Form.Control
+                          className="border_radius"
+                          type="text"
+                          placeholder="Enter your Phone"
+                          id="phone"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                        />
+                      </InputGroup>
+                    </Form.Group>
+                  </Col>
+
+                  <Col md={6}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>
+                        <strong>User type</strong>
+                      </Form.Label>
+                      <InputGroup>
+                        <InputGroup.Text className="border_radius">
+                          <FaBusinessTime />
+                        </InputGroup.Text>
+                        <Form.Control
+                          className="border_radius"
+                          type="text"
+                          placeholder="Enter your Usertype"
+                          id="user_type"
+                          value={user_type}
+                          onChange={(e) => setUser_type(e.target.value)}
                         />
                       </InputGroup>
                     </Form.Group>
