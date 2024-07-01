@@ -86,6 +86,12 @@ export default function Personalinfo() {
     return () => clearTimeout(timer);
   }, [success]);
 
+
+  useEffect(() => {
+    const user_type = localStorage.getItem("user_type");
+    setUser_type(user_type || "");
+  }, []);
+
   return (
     <>  
        <Helmet>
@@ -108,16 +114,20 @@ export default function Personalinfo() {
                   <AiTwotoneDashboard className=''/> Personal Information
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link className={`nav-link  btn btn-primary radius text-start border_radius ${activeSection === "changePassword" ? "active btn-primary text-white bg-primary" : "text_sidebar"}`} to="#" onClick={() => setActiveSection("changePassword")}>
-                  <RiLockPasswordFill  /> Change Password
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link  btn btn-primary radius text-start text_sidebar border_radius" to="#">
-                  <PiUsersThreeBold /> Delete Account
-                </Link>
-              </li>
+              {user_type !== "Business" && (
+                <>
+                  <li className="nav-item">
+                    <Link className={`nav-link  btn btn-primary radius text-start border_radius ${activeSection === "changePassword" ? "active btn-primary text-white bg-primary" : "text_sidebar"}`} to="#" onClick={() => setActiveSection("changePassword")}>
+                      <RiLockPasswordFill  /> Change Password
+                    </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link  btn btn-primary radius text-start text_sidebar border_radius" to="#">
+                    <PiUsersThreeBold /> Delete Account
+                  </Link>
+                </li>
+                </>
+                )}
             </ul>
           </Col>
 
