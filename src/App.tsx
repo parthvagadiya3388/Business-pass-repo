@@ -13,29 +13,30 @@ import Notfound from "./components/404notfound-error";
 
 function App() {
   const isAuthenticated = useLoginStore(state => state.isAuthenticated);
+  const username = localStorage.getItem('username'); 
+
+  console.log(username); 
 
   return (
-
     <Router>
       <Helmet>
-          <title>Businesspass</title>
+        <title>Businesspass</title>
       </Helmet>
       
       <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/login" element={isAuthenticated ? <Navigate to="/userlist" /> : <Loginpage />} />
         <Route path="/header" element={<Header />} />
-        {isAuthenticated ? (
+        {isAuthenticated && username ? (
           <>
             <Route path="/userlist" element={<Userlist />} />
             <Route path="/adduser" element={<Adduser />} />
-            <Route path="/personalinfo" element={<Personalinfo />} />
+            {username === 'admin' && <Route path="/personalinfo" element={<Personalinfo />} />}
           </>
         ) : null}
-        <Route path="*" element={<Notfound/>} />
+        <Route path="*" element={<Notfound />} />
       </Routes>
     </Router>
-
   );
 }
 
