@@ -8,9 +8,11 @@ export default function Notfound() {
       <h2>Not your usual ‘Oops, page not found!’</h2>
       <Link to='/login'>
             <Button variant="dark">
-                Dashboard
+                Retry
             </Button>
       </Link>
     </Col>
   )
 }
+
+
