@@ -35,7 +35,7 @@ const useLoginStore = create<UserState>((set) => ({
       );
 
       if (localUser) {
-        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE5ODM2ODAyLCJpYXQiOjE3MTk4MzMyMDIsImp0aSI6IjA4NmY5NGJhMGExNTQ0M2U5YWQ2MTI4NTQwODI1YmIzIiwidXNlcl9pZCI6MX0.la4tHZYQ7GzJjPpvwrnMvqV24tzNL1-HPZAT2ANLOfU';
+        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzIwMTY0MzA4LCJpYXQiOjE3MjAxNjA3MDgsImp0aSI6ImRjNmFiMTNmNTdkMzQ5NmY4YzRjYThiN2I5MWUwMTYzIiwidXNlcl9pZCI6MX0.j6K3okbCgIbReuW3vwXD9K7stYqAiPP9YVfVdVErNkk';
         localStorage.setItem('token', token);
         set({ isAuthenticated: true });
         navigate('/userlist');
