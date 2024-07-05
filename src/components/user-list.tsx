@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from './header';
-import { Alert, Button, Card, Col, Container, Modal, Row, Table } from "react-bootstrap";
+import { Alert, Button, Card, Col, Container, Modal, Row, Table, Pagination } from "react-bootstrap";
 import { FaEye } from 'react-icons/fa';
 import { TiEdit } from 'react-icons/ti';
 import { MdDeleteForever } from 'react-icons/md';
@@ -15,12 +15,13 @@ export default function Userlist() {
   const [show, setShow] = useState<boolean>(false);
   const [userToDelete, setUserToDelete] = useState<any>(null);
   const [actionType, setActionType] = useState<string>("");
-  
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageSize] = useState<number>(3);
+
+  // console.log("page*------------****---*-**-*-*-**-*-*-",pageSize);
+
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
-  
-  console.log("data---userdata-------------------", users);
-  // console.log("actionType***************", actionType)
 
   const handleClose = () => setShow(false);
 
@@ -40,7 +41,7 @@ export default function Userlist() {
     setSearchInput(e.target.value);
   };
 
-   const handleEdit = (user: any) => {
+  const handleEdit = (user: any) => {
     localStorage.setItem("selectedUser", JSON.stringify(user));
     setSelectedUser(user);
     navigate('/adduser');
@@ -52,26 +53,48 @@ export default function Userlist() {
       setShow(false);
     }
   };
+
   const handelAdd = () => {
-    localStorage.removeItem("selectedUser"); 
-    setSelectedUser(null); 
+    localStorage.removeItem("selectedUser");
+    setSelectedUser(null);
     navigate('/adduser');
   };
-  // useEffect(() => {
-  //   document.title = 'Users';
-  // }, []);
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const filteredUsers = users.filter((user) => {
+    const searchString = searchInput.toLowerCase();
+    return (
+      (user.name && user.name.toLowerCase().includes(searchString)) ||
+      (user.email && user.email.toLowerCase().includes(searchString))
+    );
+  });
+
+  // console.log("filteruser*------------****---*-**-*-*-**-*-*-",filteredUsers);
+
+  
+
+  const totalPages = Math.ceil(filteredUsers.length / pageSize);
+  const displayedUsers = filteredUsers.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+  // console.log("totalpage*------------****---*-**-*-*-**-*-*-",totalPages);
+  console.log("displaye user*------------****---*-**-*-*-**-*-*-",displayedUsers);
+
+
 
   return (
     <Col>
       <Helmet>
-          <title>Users</title>
+        <title>Users</title>
       </Helmet>
-      
+
       <Header />
-      <Container  className=''>
+      <Container>
         <Row>
           <Col md={3} className=''>
-                <Sidebar/>
+            <Sidebar />
           </Col>
 
           <Col className="wlc_card bg-light" md={9}>
@@ -110,13 +133,7 @@ export default function Userlist() {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.filter((user) => {
-                    const searchString = searchInput.toLowerCase();
-                    return (
-                      user.name.toLowerCase().includes(searchString) ||
-                      user.email.toLowerCase().includes(searchString)
-                    );
-                  }).map((user, index) => (
+                  {displayedUsers.map((user, index) => (
                     <tr key={index}>
                       <td className='align-content-center'>{user.name}</td>
                       <td className='align-content-center'>{user.email}</td>
@@ -141,6 +158,17 @@ export default function Userlist() {
               </table>
               {error && <Alert variant="danger">{error}</Alert>}
             </Col>
+            <Pagination className="justify-content-center">
+              {[...Array(totalPages).keys()].map((pageNumber) => (
+                <Pagination.Item
+                  key={pageNumber + 1}
+                  active={pageNumber + 1 === currentPage}
+                  onClick={() => handlePageChange(pageNumber + 1)}
+                >
+                  {pageNumber + 1}
+                </Pagination.Item>
+              ))}
+            </Pagination>
           </Col>
 
           <Modal show={show} onHide={handleClose}>
