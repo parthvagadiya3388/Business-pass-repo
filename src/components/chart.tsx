@@ -27,8 +27,8 @@ const Chart = () => {
                             <thead className='thead-light'>
                                 <tr className='Table_header'>
                                     <th>Name</th>
-                                    <th>Email</th>
                                     <th>Phone</th>
+                                    <th>Email</th>
                                     <th>Country</th>
                                     <th>Gender</th>
                                     <th>Age</th>
