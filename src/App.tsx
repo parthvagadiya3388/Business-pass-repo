@@ -10,6 +10,9 @@ import Adduser from "./components/add-users";
 import Personalinfo from "./components/personal-info";
 import { Helmet } from "react-helmet-async";
 import Notfound from "./components/404notfound-error";
+import UserlistInf from "./components/employee-list";
+import Chart from "./components/chart";
+import Dashboad from "./components/user-dashboad";
 
 function App() {
   const isAuthenticated = useLoginStore(state => state.isAuthenticated);
@@ -29,7 +32,10 @@ function App() {
         <Route path="/header" element={<Header />} />
         {isAuthenticated && username ? (
           <>
+            <Route path="/dashboad" element={<Dashboad />} />
             <Route path="/userlist" element={<Userlist />} />
+            <Route path="/employe-list" element={<UserlistInf />} />
+            <Route path="/user-chart" element={<Chart />} />
             <Route path="/adduser" element={<Adduser />} />
             {username === 'admin' && <Route path="/personalinfo" element={<Personalinfo />} />}
           </>
