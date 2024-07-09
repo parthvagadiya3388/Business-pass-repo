@@ -1,13 +1,14 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from './header';
-import { Alert, Button, Card, Col, Container, Modal, Row, Table, Pagination } from "react-bootstrap";
+import { Alert, Button, Card, Col, Container, Modal, Row, Table } from "react-bootstrap";
 import { FaEye } from 'react-icons/fa';
 import { TiEdit } from 'react-icons/ti';
 import { MdDeleteForever } from 'react-icons/md';
 import useUserStore from '../zustandstore/userApisStore';
 import Sidebar from './side-bar';
 import { Helmet } from 'react-helmet-async';
+import ReactPaginate from 'react-paginate';
 
 export default function Userlist() {
   const { users, error, userApis, deleteUserApis, setSelectedUser } = useUserStore();
@@ -15,14 +16,12 @@ export default function Userlist() {
   const [show, setShow] = useState<boolean>(false);
   const [userToDelete, setUserToDelete] = useState<any>(null);
   const [actionType, setActionType] = useState<string>("");
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [pageSize] = useState<number>(3);
-
-  // console.log("page*------------****---*-**-*-*-**-*-*-",pageSize);
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 5;
 
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
-
+  
   const handleClose = () => setShow(false);
 
   const handleShow = (user: any, action: string) => {
@@ -39,6 +38,7 @@ export default function Userlist() {
 
   const handleSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
+    setCurrentPage(0); 
   };
 
   const handleEdit = (user: any) => {
@@ -54,14 +54,14 @@ export default function Userlist() {
     }
   };
 
-  const handelAdd = () => {
-    localStorage.removeItem("selectedUser");
-    setSelectedUser(null);
+  const handleAdd = () => {
+    localStorage.removeItem("selectedUser"); 
+    setSelectedUser(null); 
     navigate('/adduser');
   };
 
-  const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
+  const handlePageClick = (data: { selected: number }) => {
+    setCurrentPage(data.selected);
   };
 
   const filteredUsers = users.filter((user) => {
@@ -72,24 +72,22 @@ export default function Userlist() {
     );
   });
 
-  // console.log("filteruser*------------****---*-**-*-*-**-*-*-",filteredUsers);
+  const pageCount = Math.ceil(filteredUsers.length / itemsPerPage);
+  const offset = currentPage * itemsPerPage;
+  const currentUsers = filteredUsers.slice(offset, offset + itemsPerPage);
 
-  
-
-  const totalPages = Math.ceil(filteredUsers.length / pageSize);
-  const displayedUsers = filteredUsers.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-
-  // console.log("totalpage*------------****---*-**-*-*-**-*-*-",totalPages);
-  console.log("displaye user*------------****---*-**-*-*-**-*-*-",displayedUsers);
-
-
+  console.log("cuurentpage" , currentPage)
+  console.log("itemperpage" , itemsPerPage)
+  console.log("pagecount" , pageCount)
+  console.log("offset" , offset)
+  console.log("current user" , currentUsers)
 
   return (
     <Col>
       <Helmet>
         <title>Users</title>
       </Helmet>
-
+      
       <Header />
       <Container>
         <Row>
@@ -113,7 +111,7 @@ export default function Userlist() {
                     onChange={handleSearchInputChange}
                   />
                 </Col>
-                <Button className='border_radias form-control Input_button_emp border_radius' onClick={handelAdd}>
+                <Button className='border_radias form-control Input_button_emp border_radius' onClick={handleAdd}>
                   <Link to='/adduser' className='text-white text-decoration-none link_tag'>Add User</Link>
                 </Button>
               </Col>
@@ -133,7 +131,7 @@ export default function Userlist() {
                   </tr>
                 </thead>
                 <tbody>
-                  {displayedUsers.map((user, index) => (
+                  {currentUsers.map((user, index) => (
                     <tr key={index}>
                       <td className='align-content-center'>{user.name}</td>
                       <td className='align-content-center'>{user.email}</td>
@@ -157,18 +155,25 @@ export default function Userlist() {
                 </tbody>
               </table>
               {error && <Alert variant="danger">{error}</Alert>}
+              <ReactPaginate
+                previousLabel={'Previous'}
+                nextLabel={'Next'}
+                breakLabel={'...'}
+                breakClassName={'break-me'}
+                pageCount={pageCount}
+                onPageChange={handlePageClick}
+                containerClassName={'pagination justify-content-center'}
+                activeClassName={'active'}
+                previousClassName={'page-item'}
+                nextClassName={'page-item'}
+                pageClassName={'page-item'}
+                pageLinkClassName={'page-link'}
+                previousLinkClassName={'page-link'}
+                nextLinkClassName={'page-link'}
+                breakLinkClassName={'page-link'}
+                disabledClassName={'disabled'}
+              />
             </Col>
-            <Pagination className="justify-content-center">
-              {[...Array(totalPages).keys()].map((pageNumber) => (
-                <Pagination.Item
-                  key={pageNumber + 1}
-                  active={pageNumber + 1 === currentPage}
-                  onClick={() => handlePageChange(pageNumber + 1)}
-                >
-                  {pageNumber + 1}
-                </Pagination.Item>
-              ))}
-            </Pagination>
           </Col>
 
           <Modal show={show} onHide={handleClose}>
@@ -181,7 +186,7 @@ export default function Userlist() {
                   <button type="button" className="btn-close toggle_button m-2 ml-2" onClick={handleClose}></button>
                 </Col>
               </Col>
-              <p>Are you sure you want to user?</p>
+              <p>Are you sure you want to {actionType === 'invite' ? 'invite' : 'delete'} this user?</p>
               <Table>
                 <tbody>
                   <tr>
@@ -220,7 +225,6 @@ export default function Userlist() {
               </Col>
             </Card>
           </Modal>
-
         </Row>
       </Container>
     </Col>
