@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Card, Col, Container, InputGroup, Row, Form, Button } from "react-bootstrap";
 import { BsBagCheck } from "react-icons/bs";
-import { API_URL } from "../config";
 import { useFormik, FormikHelpers } from "formik";
 import Header from "./header";
 import Sidebar from "./side-bar";
@@ -35,49 +34,37 @@ const initialValues: FormValues = {
 const SELECTED_USER_STORAGE_KEY = "selectedUser";
 
 export default function Adduser() {
-  const [error, setError] = useState({} as Record<string, string>);
+  const [error , setError] = useState({} as Record<string, string>);
   const navigate = useNavigate();
-  const { selectedUser, clearSelectedUser, setSelectedUser } = useUserStore();
+  const { selectedUser, clearSelectedUser, setSelectedUser , addUser , userUpdateApis } = useUserStore();
+  const token = localStorage.getItem('token');
 
-  console.log("selectUser---", selectedUser);
+  // console.log("selectUser---", selectedUser);
 
   const formik = useFormik<FormValues>({
-    initialValues: selectedUser ? { ...selectedUser, password: "", confirm_password: "" } : initialValues,
+    initialValues: selectedUser ? { ...selectedUser, password: "12345678", confirm_password: "12345678" } : initialValues,
     validationSchema: schema,
-    onSubmit: async (values, { resetForm }: FormikHelpers<FormValues>) => {
+
+    onSubmit: async (values, {  resetForm }: FormikHelpers<FormValues>) => {
       try {
-        const token = localStorage.getItem('token');
-        const url = selectedUser ? `${API_URL}/users/${selectedUser.id}/` : `${API_URL}/users/`;
-        const method = selectedUser ? 'PATCH' : 'POST';
-        
-        const response = await fetch(url, {
-          method,
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify(values),
-        });
-
-        if (response.status === 400) {
-          const errorData = await response.json();
-          setError(errorData.errors);
-          return;
-        }
-
-        resetForm();
         if (selectedUser) {
-          clearSelectedUser();
-        }else {
-          const users = JSON.parse(localStorage.getItem('users') || '[]');
-          users.push(values);
-          localStorage.setItem('users', JSON.stringify(users));
+          await userUpdateApis(token!, selectedUser.id, values);
+        } else {
+          await addUser(token!, values);
         }
-        
-        navigate('/userlist');
+          resetForm();
+          navigate("/userlist");
+
+          if (selectedUser) {
+            clearSelectedUser();
+          }else {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            users.push(values);
+            localStorage.setItem('users', JSON.stringify(users));
+          }
+
       } catch (error) {
-        console.error('Error:', error);
+        console.error("Error:", error);
       }
     },
   });
@@ -98,7 +85,6 @@ export default function Adduser() {
       }
     }
   }, [selectedUser, setSelectedUser]);
-  
   
   return (
     <>
